@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.7
+    container_name: forex_db
+    restart: on-failure
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=forex
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    healthcheck:
+      test: pg_isready -q -d forex -U postgres
+      interval: 10s
+      timeout: 10s
+      retries: 5
+  api:
+    build:
+      context: .
+    image: forex:develop
+    container_name: forex_api
+    restart: on-failure
+    volumes:
+      - .:/code
+      - scripts:/code/scripts
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+    driver: local
+    name: pgdata
+  scripts:
+    driver: local
+    name: scripts
