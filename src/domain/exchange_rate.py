@@ -5,7 +5,7 @@ from datetime import date
 
 
 @dataclass
-class Currency:
+class CurrencyEntity:
     code: str
     name: str
     symbol: str
@@ -16,9 +16,9 @@ class Currency:
 
 
 @dataclass
-class CurrencyExchangeRate:
-    source_currency: Currency
-    exchanged_currency: Currency
+class CurrencyExchangeRateEntity:
+    source_currency: CurrencyEntity
+    exchanged_currency: CurrencyEntity
     valuation_date: date
     rate_value: float
 
