@@ -7,7 +7,7 @@ from src.infrastructure.orm.db.exceptions import EntityDoesNotExist
 from src.infrastructure.orm.db.exchange_rate.models import Currency
 
 
-class CurrencyDBRepository:
+class CurrencyDatabaseRepository:
 
     def _get_currency_entity(self, currency: dict) -> CurrencyEntity:
         currency['rate_value'] = float(currency['rate_value'])
