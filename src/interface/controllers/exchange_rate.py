@@ -14,7 +14,7 @@ class CurrencyController:
 
     def get(self, code: str) -> Tuple[dict, int]:
         try:
-            currency = self.currency_iterator.get(code)
+            currency = self.currency_iterator.get(code.upper())
         except EntityDoesNotExist as err:
             return {'error': err.message}, HTTPStatus.NOT_FOUND.value
         return CurrencySerializer().dump(currency), HTTPStatus.OK.value

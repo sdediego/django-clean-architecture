@@ -6,5 +6,5 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('exchange-rates/', include(f'{settings.API_ROUTES}.exchange_rates.urls'))
+    path('exchange-rates/', include(f'{settings.API_ROUTES}.exchange_rate.urls'))
 ]
