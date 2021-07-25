@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # project
+    'src.infrastructure.orm.db.exchange_rate'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'src.infrastructure.server.urls'
+
+API_ROUTES = 'src.infrastructure.api.routes'
 
 TEMPLATES = [
     {
