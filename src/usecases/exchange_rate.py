@@ -1,8 +1,10 @@
 # coding: utf-8
 
+import pandas as pd
+
 from django.db.models.query import QuerySet
 
-from src.domain.exchange_rate import CurrencyEntity
+from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 
 
 class CurrencyInteractor:
@@ -15,3 +17,24 @@ class CurrencyInteractor:
 
     def get_availables(self) -> QuerySet[CurrencyEntity]:
         return self.currency_repo.get_availables()
+
+
+class CurrencyExchangeRateInteractor:
+
+    def __init__(self, exchange_rate_repo: object):
+        self.exchange_rate_repo = exchange_rate_repo
+
+    def get(self, source_currency: str, exchanged_currency: str,
+            valuation_date: str) -> CurrencyExchangeRateEntity:
+        return self.exchange_rate_repo.get(
+            source_currency, exchanged_currency, valuation_date)
+
+    def get_latest(self, source_currency: str, exchanged_currency: str) \
+            -> CurrencyExchangeRateEntity:
+        today = pd.Timestamp.today().strftime('%Y-%m-%d')
+        return self.get(source_currency, exchanged_currency, today)
+
+    def get_time_series(self, source_currency: str, exchanged_currency: str,
+            date_from: str, date_to: str) -> QuerySet[CurrencyExchangeRateEntity]:
+        return self.exchange_rate_repo.get_time_series(
+            source_currency, exchanged_currency, date_from, date_to)
