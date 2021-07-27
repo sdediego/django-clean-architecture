@@ -29,3 +29,6 @@ class CurrencyExchangeRateEntity:
             f'{source_currency}/{exchanged_currency} '
             f'= {self.rate_value} ({self.valuation_date})'
         )
+
+    def calculate_amount(self, amount: float) -> float:
+        return round(amount * self.rate_value, 2)
