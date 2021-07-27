@@ -40,6 +40,14 @@ class CurrencyExchangeRateDatabaseRepository:
                 f'for {valuation_date} does not exist')
         return CurrencyExchangeRateEntity(**exchange_rate)
 
+    def get_rate_series(self, source_currency: str, exchanged_currency: str,
+            date_from: str, date_to: str) -> List[float]:
+        return CurrencyExchangeRate.objects.filter(
+            source_currency=source_currency,
+            exchanged_currency=exchanged_currency,
+            valuation_date__range=[date_from, date_to]
+        ).values_list('rate_value', flat=True)
+
     def get_time_series(self, source_currency: str, exchanged_currency: str,
             date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         qs = Q(source_currency=source_currency) \

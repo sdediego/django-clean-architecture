@@ -26,6 +26,11 @@ class CurrencyExchangeRateRepository:
             valuation_date: str) -> CurrencyExchangeRateEntity:
         return self.db_repo.get(source_currency, exchanged_currency, valuation_date)
 
+    def get_rate_series(self, source_currency: str, exchanged_currency: str,
+            date_from: str, date_to: str) -> QuerySet[CurrencyExchangeRateEntity]:
+        return self.db_repo.get_time_series(
+            source_currency, exchanged_currency, date_from, date_to)
+
     def get_time_series(self, source_currency: str, exchanged_currency: str,
             date_from: str, date_to: str) -> QuerySet[CurrencyExchangeRateEntity]:
         return self.db_repo.get_time_series(
