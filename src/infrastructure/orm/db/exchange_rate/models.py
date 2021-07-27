@@ -2,6 +2,8 @@
 
 from django.db import models
 
+from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
+
 
 class Currency(models.Model):
     code = models.CharField(max_length=3, primary_key=True, unique=True)
@@ -12,6 +14,9 @@ class Currency(models.Model):
         verbose_name = 'currency'
         verbose_name_plural = 'currencies'
         ordering = ('code',)
+
+    def __str__(self) -> str:
+        return CurrencyEntity.to_string(self)
 
 
 class CurrencyExchangeRate(models.Model):
@@ -26,3 +31,6 @@ class CurrencyExchangeRate(models.Model):
         verbose_name = 'currency exchange rate'
         verbose_name_plural = 'currency exchange rates'
         ordering = ('valuation_date', 'source_currency')
+
+    def __str__(self) -> str:
+        return CurrencyExchangeRateEntity.to_string(self)

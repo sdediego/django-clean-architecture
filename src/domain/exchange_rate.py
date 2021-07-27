@@ -10,9 +10,10 @@ class CurrencyEntity:
     name: str
     symbol: str
 
-    def __str__(self) -> str:
-        _symbol = f" ({self.symbol}):" if self.symbol else ":"
-        return f'{self.code}{_symbol} {self.name}'
+    @staticmethod
+    def to_string(currency: 'CurrencyEntity') -> str:
+        symbol = f" ({currency.symbol}):" if currency.symbol else ":"
+        return f'{currency.code}{symbol} {currency.name}'
 
 
 @dataclass
@@ -22,12 +23,13 @@ class CurrencyExchangeRateEntity:
     valuation_date: date
     rate_value: float
 
-    def __str__(self) -> str:
-        source_currency = self.source_currency.code
-        exchanged_currency = self.exchanged_currency.code
+    @staticmethod
+    def to_string(exchange_rate: 'CurrencyExchangeRateEntity') -> str:
+        source_currency = exchange_rate.source_currency.code
+        exchanged_currency = exchange_rate.exchanged_currency.code
         return (
             f'{source_currency}/{exchanged_currency} '
-            f'= {self.rate_value} ({self.valuation_date})'
+            f'= {exchange_rate.rate_value} ({exchange_rate.valuation_date})'
         )
 
     def calculate_amount(self, amount: float) -> float:
