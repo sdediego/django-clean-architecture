@@ -20,8 +20,8 @@ class CurrencyEntity:
 
 @dataclass
 class CurrencyExchangeRateEntity:
-    source_currency: CurrencyEntity = None
-    exchanged_currency: CurrencyEntity = None
+    source_currency: Union[CurrencyEntity, str] = None
+    exchanged_currency: Union[CurrencyEntity, str] = None
     valuation_date: Union[date, str] = None
     rate_value: Union[Decimal, float] = None
 
@@ -29,7 +29,7 @@ class CurrencyExchangeRateEntity:
         if self.valuation_date and not isinstance(self.valuation_date, str):
             self.valuation_date = self.valuation_date.strftime('%Y-%m-%d')
         if self.rate_value:
-            self.rate_value = float(self.rate_value)
+            self.rate_value = round(float(self.rate_value), 6)
 
     @staticmethod
     def to_string(exchange_rate: 'CurrencyExchangeRateEntity') -> str:
