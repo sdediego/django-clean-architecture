@@ -30,7 +30,7 @@ class CurrencyExchangeRate(models.Model):
     class Meta:
         verbose_name = 'currency exchange rate'
         verbose_name_plural = 'currency exchange rates'
-        ordering = ('valuation_date', 'source_currency')
+        ordering = ('-valuation_date', 'source_currency')
 
     def __str__(self) -> str:
         return CurrencyExchangeRateEntity.to_string(self)

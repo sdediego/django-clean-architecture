@@ -16,7 +16,7 @@ class CurrencyRouter(SimpleRouter):
             detail=False
         ),
         Route(
-            url=r'^(?P<code>\w+)/$',
+            url=r'^(?P<code>[a-zA-Z]+)/$',
             mapping={'get': 'get'},
             name='{basename}-get',
             initkwargs={'viewset_factory': CurrencyViewSetFactory},
