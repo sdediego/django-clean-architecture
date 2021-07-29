@@ -1,15 +1,15 @@
 # coding: utf-8
 
-import operator
-from functools import reduce
 from http import HTTPStatus
 from typing import Tuple
 
 from src.infrastructure.orm.db.exceptions import EntityDoesNotExist
+from src.interface.controllers.utils import calculate_time_weighted_rate
 from src.interface.serializers.exchange_rate import (
     CurrencySerializer, CurrencyExchangeRateAmountSerializer,
     CurrencyExchangeRateConvertSerializer, CurrencyExchangeRateListSerializer,
-    CurrencyExchangeRateSerializer, TimeWeightedRateSerializer)
+    CurrencyExchangeRateSerializer, TimeWeightedRateListSerializer,
+    TimeWeightedRateSerializer)
 
 
 class CurrencyController:
@@ -42,7 +42,10 @@ class CurrencyExchangeRateController:
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value
         amount = data.pop('amount')
-        exchange_rate = self.exchange_rate_interactor.get_latest(**data)
+        try:
+            exchange_rate = self.exchange_rate_interactor.get_latest(**data)
+        except EntityDoesNotExist as err:
+            return {'error': err.message}, HTTPStatus.NOT_FOUND.value
         payload = {
             'exchanged_currency': data.get('exchanged_currency'),
             'exchanged_amount': exchange_rate.calculate_amount(amount),
@@ -64,12 +67,14 @@ class CurrencyExchangeRateController:
         )
 
     def calculate_twr(self, params: dict) -> Tuple[dict, int]:
-        data = CurrencyExchangeRateListSerializer().load(params)
+        data = TimeWeightedRateListSerializer().load(params)
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value
         rate_series = self.exchange_rate_interactor.get_rate_series(**data)
-        twr = reduce(operator.mul, rate_series)**(1.0 / len(rate_series))
+        time_weighted_rate = {
+            'time_weighted_rate': calculate_time_weighted_rate(rate_series)
+        }
         return (
-            TimeWeightedRateSerializer(time_weighted_rate=twr).dump(),
+            TimeWeightedRateSerializer().dump(time_weighted_rate),
             HTTPStatus.OK.value
         )

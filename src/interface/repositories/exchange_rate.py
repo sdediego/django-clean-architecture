@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.db.models.query import QuerySet
+from typing import List
 
 from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 
@@ -13,7 +13,7 @@ class CurrencyRepository:
     def get(self, code: str) -> CurrencyEntity:
         return self.db_repo.get(code)
 
-    def get_availables(self) -> QuerySet[CurrencyEntity]:
+    def get_availables(self) -> List[CurrencyEntity]:
         return self.db_repo.get_availables()
 
 
@@ -27,11 +27,11 @@ class CurrencyExchangeRateRepository:
         return self.db_repo.get(source_currency, exchanged_currency, valuation_date)
 
     def get_rate_series(self, source_currency: str, exchanged_currency: str,
-            date_from: str, date_to: str) -> QuerySet[CurrencyExchangeRateEntity]:
-        return self.db_repo.get_time_series(
+                        date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
+        return self.db_repo.get_rate_series(
             source_currency, exchanged_currency, date_from, date_to)
 
     def get_time_series(self, source_currency: str, exchanged_currency: str,
-            date_from: str, date_to: str) -> QuerySet[CurrencyExchangeRateEntity]:
+                        date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         return self.db_repo.get_time_series(
             source_currency, exchanged_currency, date_from, date_to)
