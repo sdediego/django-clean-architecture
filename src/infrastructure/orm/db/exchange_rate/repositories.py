@@ -5,9 +5,9 @@ from typing import List
 from django.db.models import Q
 
 from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
-from src.infrastructure.orm.db.exceptions import EntityDoesNotExist
 from src.infrastructure.orm.db.exchange_rate.models import (
     Currency, CurrencyExchangeRate)
+from src.interface.repositories.exceptions import EntityDoesNotExist
 
 
 class CurrencyDatabaseRepository:

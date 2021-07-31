@@ -3,8 +3,8 @@
 from http import HTTPStatus
 from typing import Tuple
 
-from src.infrastructure.orm.db.exceptions import EntityDoesNotExist
 from src.interface.controllers.utils import calculate_time_weighted_rate
+from src.interface.repositories.exceptions import EntityDoesNotExist
 from src.interface.serializers.exchange_rate import (
     CurrencySerializer, CurrencyExchangeRateAmountSerializer,
     CurrencyExchangeRateConvertSerializer, CurrencyExchangeRateListSerializer,
