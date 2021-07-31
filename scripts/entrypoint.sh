@@ -10,5 +10,5 @@ echo "Port ${PORT} exposed"
 export PORT
 
 # Run python specific scripts
-python manage.py migrate --settings=src.infrastructure.config.settings
-python manage.py runserver 0.0.0.0:${PORT} --settings=src.infrastructure.config.settings
+python manage.py migrate
+python manage.py runserver 0.0.0.0:${PORT}
