@@ -1,0 +1,332 @@
+[{
+    "model": "exchange_rate.currency",
+    "pk": "CHF",
+    "fields": {
+      "name": "Swiss franc",
+      "symbol": null
+    }
+  },
+  {
+    "model": "exchange_rate.currency",
+    "pk": "EUR",
+    "fields": {
+      "name": "Euro",
+      "symbol": "€"
+    }
+  },
+  {
+    "model": "exchange_rate.currency",
+    "pk": "GBP",
+    "fields": {
+      "name": "Pound sterling",
+      "symbol": null
+    }
+  },
+  {
+    "model": "exchange_rate.currency",
+    "pk": "USD",
+    "fields": {
+      "name": "United States dollar",
+      "symbol": "$"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-07",
+      "rate_value": "1.322080"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-07",
+      "rate_value": "0.849594"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-07",
+      "rate_value": "1.236573"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-08",
+      "rate_value": "1.321879"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-08",
+      "rate_value": "0.849669"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-08",
+      "rate_value": "1.235613"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-09",
+      "rate_value": "1.320875"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-09",
+      "rate_value": "0.849654"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-09",
+      "rate_value": "1.236817"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-10",
+      "rate_value": "1.324684"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-10",
+      "rate_value": "0.851441"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-10",
+      "rate_value": "1.238482"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-11",
+      "rate_value": "1.330442"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-11",
+      "rate_value": "0.851593"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-11",
+      "rate_value": "1.234940"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-14",
+      "rate_value": "1.334050"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-14",
+      "rate_value": "0.850705"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-14",
+      "rate_value": "1.229515"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-15",
+      "rate_value": "1.334301"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-15",
+      "rate_value": "0.849763"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-15",
+      "rate_value": "1.230018"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-16",
+      "rate_value": "1.334586"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-16",
+      "rate_value": "0.849555"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-16",
+      "rate_value": "1.230269"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-17",
+      "rate_value": "1.335813"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-17",
+      "rate_value": "0.849875"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-17",
+      "rate_value": "1.232322"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "USD",
+      "valuation_date": "2021-06-18",
+      "rate_value": "1.339077"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "GBP",
+      "valuation_date": "2021-06-18",
+      "rate_value": "0.855927"
+    }
+  },
+  {
+    "model": "exchange_rate.currencyexchangerate",
+    "pk": null,
+    "fields": {
+      "source_currency": "EUR",
+      "exchanged_currency": "CHF",
+      "valuation_date": "2021-06-18",
+      "rate_value": "1.232825"
+    }
+}]
