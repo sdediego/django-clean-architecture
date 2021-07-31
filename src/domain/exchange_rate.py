@@ -33,8 +33,10 @@ class CurrencyExchangeRateEntity:
 
     @staticmethod
     def to_string(exchange_rate: 'CurrencyExchangeRateEntity') -> str:
-        source_currency = exchange_rate.source_currency.code
-        exchanged_currency = exchange_rate.exchanged_currency.code
+        source_currency = exchange_rate.source_currency.code if hasattr(
+            exchange_rate.source_currency, 'code') else exchange_rate.source_currency
+        exchanged_currency = exchange_rate.exchanged_currency.code if hasattr(
+            exchange_rate.exchanged_currency, 'code') else exchange_rate.exchanged_currency
         return (
             f'{source_currency}/{exchanged_currency} '
             f'= {exchange_rate.rate_value} ({exchange_rate.valuation_date})'

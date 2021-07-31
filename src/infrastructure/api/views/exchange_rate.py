@@ -2,10 +2,10 @@
 
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ViewSet
 
 
-class CurrencyViewSet(GenericViewSet):
+class CurrencyViewSet(ViewSet):
     viewset_factory = None
 
     def get(self, request: Request, code: str, *args, **kwargs) -> Response:
@@ -17,7 +17,7 @@ class CurrencyViewSet(GenericViewSet):
         return Response(data=payload, status=status)
 
 
-class CurrencyExchangeRateViewSet(GenericViewSet):
+class CurrencyExchangeRateViewSet(ViewSet):
     viewset_factory = None
 
     def convert(self, request: Request, *args, **kwargs) -> Response:

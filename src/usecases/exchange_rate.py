@@ -1,8 +1,7 @@
 # coding: utf-8
 
+import datetime
 from typing import List
-
-import pandas as pd
 
 from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 
@@ -31,7 +30,7 @@ class CurrencyExchangeRateInteractor:
 
     def get_latest(self, source_currency: str,
                    exchanged_currency: str) -> CurrencyExchangeRateEntity:
-        today = pd.Timestamp.today().strftime('%Y-%m-%d')
+        today = datetime.date.today().strftime('%Y-%m-%d')
         return self.get(source_currency, exchanged_currency, today)
 
     def get_rate_series(self, source_currency: str, exchanged_currency: str,
