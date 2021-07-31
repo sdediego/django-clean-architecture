@@ -14,6 +14,7 @@ marshmallow = "^3.13.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.7"
+pytest-django = "^4.4.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
