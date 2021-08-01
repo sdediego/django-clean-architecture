@@ -9,7 +9,7 @@ import pytest
 from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 from src.interface.repositories.exchange_rate import (
     CurrencyRepository, CurrencyExchangeRateRepository)
-from tests.fixtures import currency, currency_exchange_rate
+from tests.fixtures import currency, exchange_rate
 
 
 @pytest.mark.unit
@@ -22,8 +22,7 @@ def test_currency_repository_get(currency):
     assert result.code == currency.code
     assert result.name == currency.name
     assert result.symbol == currency.symbol
-    assert CurrencyEntity.to_string(
-        result) == CurrencyEntity.to_string(currency)
+    assert CurrencyEntity.to_string(result) == CurrencyEntity.to_string(currency)
 
 
 @pytest.mark.unit
@@ -41,35 +40,35 @@ def test_currency_repository_get_availables(currency):
 
 
 @pytest.mark.unit
-def test_currency_exchange_rate_repository_get(currency_exchange_rate):
+def test_currency_exchange_rate_repository_get(exchange_rate):
     db_repo = Mock()
-    db_repo.get.return_value = currency_exchange_rate
+    db_repo.get.return_value = exchange_rate
     exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
     filter = {
-        'source_currency': currency_exchange_rate.source_currency,
-        'exchanged_currency': currency_exchange_rate.exchanged_currency,
-        'valuation_date': currency_exchange_rate.valuation_date
+        'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
+        'valuation_date': exchange_rate.valuation_date
     }
     result = exchange_rate_repo.get(**filter)
     assert db_repo.get.called
-    assert result.source_currency == currency_exchange_rate.source_currency
-    assert result.exchanged_currency == currency_exchange_rate.exchanged_currency
-    assert result.valuation_date == currency_exchange_rate.valuation_date
-    assert result.rate_value == currency_exchange_rate.rate_value
+    assert result.source_currency == exchange_rate.source_currency
+    assert result.exchanged_currency == exchange_rate.exchanged_currency
+    assert result.valuation_date == exchange_rate.valuation_date
+    assert result.rate_value == exchange_rate.rate_value
     assert CurrencyExchangeRateEntity.to_string(
-        result) == CurrencyExchangeRateEntity.to_string(currency_exchange_rate)
+        result) == CurrencyExchangeRateEntity.to_string(exchange_rate)
 
 
 @pytest.mark.unit
-def test_currency_exchange_rate_repository_get_rate_series(currency_exchange_rate):
+def test_currency_exchange_rate_repository_get_rate_series(exchange_rate):
     num_of_rates = random.randint(1, 10)
     rate_series = [round(random.uniform(0.8, 1.2), 6) for _ in range(num_of_rates)]
     db_repo = Mock()
     db_repo.get_rate_series.return_value = rate_series
     exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
     filter = {
-        'source_currency': currency_exchange_rate.source_currency,
-        'exchanged_currency': currency_exchange_rate.exchanged_currency,
+        'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
         'date_from': datetime.date.today() + datetime.timedelta(days=-num_of_rates),
         'date_to': datetime.date.today()
     }
@@ -81,15 +80,15 @@ def test_currency_exchange_rate_repository_get_rate_series(currency_exchange_rat
 
 
 @pytest.mark.unit
-def test_currency_exchange_rate_repository_get_time_series(currency_exchange_rate):
+def test_currency_exchange_rate_repository_get_time_series(exchange_rate):
     series_length = random.randint(1, 10)
-    time_series = [currency_exchange_rate for _ in range(series_length)]
+    time_series = [exchange_rate for _ in range(series_length)]
     db_repo = Mock()
     db_repo.get_time_series.return_value = time_series
     exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
     filter = {
-        'source_currency': currency_exchange_rate.source_currency,
-        'exchanged_currency': currency_exchange_rate.exchanged_currency,
+        'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
         'date_from': datetime.date.today() + datetime.timedelta(days=-series_length),
         'date_to': datetime.date.today()
     }
