@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 from datetime import date
-from decimal import Decimal
 from typing import Union
 
 
@@ -22,11 +21,11 @@ class CurrencyEntity:
 class CurrencyExchangeRateEntity:
     source_currency: Union[CurrencyEntity, str] = None
     exchanged_currency: Union[CurrencyEntity, str] = None
-    valuation_date: Union[date, str] = None
-    rate_value: Union[Decimal, float] = None
+    valuation_date: str = None
+    rate_value: float = None
 
     def __post_init__(self):
-        if self.valuation_date and not isinstance(self.valuation_date, str):
+        if self.valuation_date and isinstance(self.valuation_date, date):
             self.valuation_date = self.valuation_date.strftime('%Y-%m-%d')
         if self.rate_value:
             self.rate_value = round(float(self.rate_value), 6)
@@ -44,3 +43,38 @@ class CurrencyExchangeRateEntity:
 
     def calculate_amount(self, amount: float) -> float:
         return round(amount * self.rate_value, 2)
+
+
+@dataclass
+class CurrencyExchangeAmountEntity:
+    exchanged_currency: str = None
+    exchanged_amount: float = None
+    rate_value: float = None
+
+    def __post_init__(self):
+        if hasattr(self.exchanged_currency, 'code'):
+            self.exchanged_currency = self.exchanged_currency.code
+        if self.exchanged_amount:
+            self.exchanged_amount = round(float(self.exchanged_amount), 2)
+        if self.rate_value:
+            self.rate_value = round(float(self.rate_value), 6)
+
+    @staticmethod
+    def to_string(exchange_amount: 'CurrencyExchangeAmountEntity') -> str:
+        return (
+            f'{exchange_amount.exchanged_currency}({exchange_amount.rate_value})'
+            f' = {exchange_amount.exchanged_amount}'
+        )
+
+
+@dataclass
+class TimeWeightedRateEntity:
+    time_weighted_rate: float = None
+
+    def __post_init__(self):
+        if self.time_weighted_rate:
+            self.time_weighted_rate = round(float(self.time_weighted_rate), 6)
+
+    @staticmethod
+    def to_string(time_weighted_rate: 'TimeWeightedRateEntity') -> str:
+        return f'twr = {time_weighted_rate.time_weighted_rate}'
