@@ -8,7 +8,7 @@ from marshmallow.exceptions import ValidationError
 class CurrencySerializer(Schema):
     code = fields.String(required=True)
     name = fields.String(required=True)
-    symbol = fields.String(required=True)
+    symbol = fields.String(required=False)
 
 
 class CurrencyExchangeRateConvertSerializer(Schema):
