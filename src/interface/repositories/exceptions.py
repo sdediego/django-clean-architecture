@@ -6,6 +6,9 @@ class EntityError(Exception):
         super().__init__(*args, **kwargs)
         self.message = message
 
+    def __str__(self) -> str:
+        return f'{self.__class__.__name__}: {self.message}'
+
 
 class EntityDoesNotExist(EntityError):
     pass
