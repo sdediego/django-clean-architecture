@@ -15,15 +15,6 @@ from src.interface.repositories.exceptions import EntityDoesNotExist
 from tests.fixtures import currency, exchange_rate
 
 
-def mock_objects_filter_values_first(mock_objets, result):
-    mock_filter = mock_objets.filter
-    mock_filter.return_value = Mock()
-    mock_values = mock_filter.return_value.values
-    mock_values.return_value = Mock()
-    mock_first = mock_values.return_value.first
-    mock_first.return_value = result
-
-
 @pytest.mark.unit
 @patch.object(Currency, 'objects')
 def test_currency_db_repository_get(mock_objets, currency):

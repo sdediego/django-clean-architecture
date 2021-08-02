@@ -65,7 +65,9 @@ def test_currency_exchange_rate_amount_serializer(exchange_rate):
 def test_currency_exchange_rate_list_serializer(exchange_rate):
     data = {
         'source_currency': exchange_rate.source_currency,
-        'date_from': datetime.date.today().strftime('%Y-%m-%d'),
+        'date_from': (
+            datetime.date.today() + datetime.timedelta(days=-5)
+        ).strftime('%Y-%m-%d'),
         'date_to': datetime.date.today().strftime('%Y-%m-%d')
     }
     valid_data = CurrencyExchangeRateListSerializer().load(data)
@@ -100,7 +102,9 @@ def test_time_weighted_rate_list_serializer(exchange_rate):
     data = {
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
-        'date_from': datetime.date.today().strftime('%Y-%m-%d'),
+        'date_from': (
+            datetime.date.today() + datetime.timedelta(days=-5)
+        ).strftime('%Y-%m-%d'),
         'date_to': datetime.date.today().strftime('%Y-%m-%d')
     }
     valid_data = TimeWeightedRateListSerializer().load(data)

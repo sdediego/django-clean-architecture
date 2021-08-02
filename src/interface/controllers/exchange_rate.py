@@ -58,7 +58,7 @@ class CurrencyExchangeRateController:
             HTTPStatus.OK.value
         )
 
-    def list(self, params: dict) -> Tuple[dict, int]:
+    def list(self, params: dict) -> Tuple[list, int]:
         data = CurrencyExchangeRateListSerializer().load(params)
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value

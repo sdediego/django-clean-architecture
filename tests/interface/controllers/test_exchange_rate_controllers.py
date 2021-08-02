@@ -119,7 +119,8 @@ def test_exchange_rate_controller_list(exchange_rate):
     params = {
         'source_currency': exchange_rate.source_currency,
         'date_from': (
-            datetime.date.today() + datetime.timedelta(days=-series_length)).strftime('%Y-%m-%d'),
+            datetime.date.today() + datetime.timedelta(days=-series_length)
+        ).strftime('%Y-%m-%d'),
         'date_to': datetime.date.today().strftime('%Y-%m-%d')
     }
     exchange_rate_interactor = Mock()
@@ -161,7 +162,8 @@ def test_exchange_rate_controller_calculate_twr(exchange_rate):
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
         'date_from': (
-            datetime.date.today() + datetime.timedelta(days=-num_of_rates)).strftime('%Y-%m-%d'),
+            datetime.date.today() + datetime.timedelta(days=-num_of_rates)
+        ).strftime('%Y-%m-%d'),
         'date_to': datetime.date.today().strftime('%Y-%m-%d')
     }
     exchange_rate_interactor = Mock()
