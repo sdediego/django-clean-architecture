@@ -38,8 +38,8 @@ class CurrencyExchangeRateAmountSerializer(Schema):
 
 class CurrencyExchangeRateListSerializer(Schema):
     source_currency = fields.String(required=True)
-    date_from = fields.String(required=True)
-    date_to = fields.String(required=True)
+    date_from = fields.Date(required=True)
+    date_to = fields.Date(required=True)
 
     def load(self, data: dict) -> dict:
         try:

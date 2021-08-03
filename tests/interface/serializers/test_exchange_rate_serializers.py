@@ -63,24 +63,24 @@ def test_currency_exchange_rate_amount_serializer(exchange_rate):
 
 @pytest.mark.unit
 def test_currency_exchange_rate_list_serializer(exchange_rate):
+    date_from = datetime.date.today() + datetime.timedelta(days=-5)
+    date_to = datetime.date.today()
     data = {
         'source_currency': exchange_rate.source_currency,
-        'date_from': (
-            datetime.date.today() + datetime.timedelta(days=-5)
-        ).strftime('%Y-%m-%d'),
-        'date_to': datetime.date.today().strftime('%Y-%m-%d')
+        'date_from': date_from.strftime('%Y-%m-%d'),
+        'date_to': date_to.strftime('%Y-%m-%d')
     }
     valid_data = CurrencyExchangeRateListSerializer().load(data)
     assert valid_data['source_currency'] == data['source_currency']
-    assert valid_data['date_from'] == data['date_from']
-    assert valid_data['date_to'] == data['date_to'] 
+    assert valid_data['date_from'] == date_from
+    assert valid_data['date_to'] == date_to
 
 
 @pytest.mark.unit
 def test_currency_exchange_rate_list_serializer_validation_error(exchange_rate):
     data = {
         'source_currency': exchange_rate,
-        'date_from': datetime.date.today(),
+        'date_from': datetime.date.today() + datetime.timedelta(days=-5),
         'date_to': datetime.date.today()
     }
     invalid_data = CurrencyExchangeRateListSerializer().load(data)
@@ -99,19 +99,19 @@ def test_currency_exchange_rate_serializer(exchange_rate):
 
 @pytest.mark.unit
 def test_time_weighted_rate_list_serializer(exchange_rate):
+    date_from = datetime.date.today() + datetime.timedelta(days=-5)
+    date_to = datetime.date.today()
     data = {
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
-        'date_from': (
-            datetime.date.today() + datetime.timedelta(days=-5)
-        ).strftime('%Y-%m-%d'),
-        'date_to': datetime.date.today().strftime('%Y-%m-%d')
+        'date_from': date_from.strftime('%Y-%m-%d'),
+        'date_to': date_to.strftime('%Y-%m-%d')
     }
     valid_data = TimeWeightedRateListSerializer().load(data)
     assert valid_data['source_currency'] == data['source_currency']
     assert valid_data['exchanged_currency'] == data['exchanged_currency']
-    assert valid_data['date_from'] == data['date_from']
-    assert valid_data['date_to'] == data['date_to'] 
+    assert valid_data['date_from'] == date_from
+    assert valid_data['date_to'] == date_to
 
 
 @pytest.mark.unit
