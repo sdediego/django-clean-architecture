@@ -1,6 +1,35 @@
 version: '3.8'
 
 services:
+  api:
+    build:
+      context: .
+    image: forex:develop
+    container_name: forex_api
+    restart: on-failure
+    volumes:
+      - .:/code
+      - scripts:/code/scripts
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+  cache:
+    image: redis:6.2
+    container_name: forex_cache
+    restart: on-failure
+    volumes:
+      - redisdata:/var/lib/redis/data
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 10s
+      retries: 5
   db:
     image: postgres:12.7
     container_name: forex_db
@@ -19,25 +48,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-  api:
-    build:
-      context: .
-    image: forex:develop
-    container_name: forex_api
-    restart: on-failure
-    volumes:
-      - .:/code
-      - scripts:/code/scripts
-    ports:
-      - 8000:8000
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   pgdata:
     driver: local
     name: pgdata
+  redisdata:
+    driver: local
+    name: redisdata
   scripts:
     driver: local
     name: scripts

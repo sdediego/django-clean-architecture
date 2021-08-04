@@ -9,7 +9,7 @@ export DJANGO_ENV
 echo "Port ${PORT} exposed"
 export PORT
 
-# Run python specific scripts
+# Run python specific commands
 python manage.py migrate
 python manage.py loaddata fixtures/*.json
 python manage.py runserver 0.0.0.0:${PORT}
