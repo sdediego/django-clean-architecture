@@ -7,14 +7,23 @@ from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 
 class CurrencyRepository:
 
-    def __init__(self, db_repo: object):
+    def __init__(self, db_repo: object, cache_repo: object):
         self.db_repo = db_repo
+        self.cache_repo = cache_repo
 
     def get(self, code: str) -> CurrencyEntity:
-        return self.db_repo.get(code)
+        currency = self.cache_repo.get(code)
+        if not currency:
+            currency = self.db_repo.get(code)
+            self.cache_repo.save(code, currency)
+        return currency
 
     def get_availables(self) -> List[CurrencyEntity]:
-        return self.db_repo.get_availables()
+        currencies = self.cache_repo.get_availables()
+        if not currencies:
+            currencies = self.db_repo.get_availables()
+            self.cache_repo.save_availables(currencies)
+        return currencies
 
 
 class CurrencyExchangeRateRepository:
