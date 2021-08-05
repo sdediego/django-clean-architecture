@@ -28,12 +28,19 @@ class CurrencyRepository:
 
 class CurrencyExchangeRateRepository:
 
-    def __init__(self, db_repo: object):
+    def __init__(self, db_repo: object, cache_repo: object):
         self.db_repo = db_repo
+        self.cache_repo = cache_repo
 
     def get(self, source_currency: str, exchanged_currency: str,
             valuation_date: str) -> CurrencyExchangeRateEntity:
-        return self.db_repo.get(source_currency, exchanged_currency, valuation_date)
+        exchange_rate = self.cache_repo.get(
+            source_currency, exchanged_currency, valuation_date)
+        if not exchange_rate:
+            exchange_rate = self.db_repo.get(
+                source_currency, exchanged_currency, valuation_date)
+            self.cache_repo.save(exchange_rate)
+        return exchange_rate
 
     def get_rate_series(self, source_currency: str, exchanged_currency: str,
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
