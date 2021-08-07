@@ -89,10 +89,13 @@ def test_currency_repository_cache_get_availables(currency):
 
 
 @pytest.mark.unit
-def test_currency_exchange_rate_repository_get(exchange_rate):
+def test_currency_exchange_rate_repository_database_get(exchange_rate):
     db_repo = Mock()
     db_repo.get.return_value = exchange_rate
-    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
+    cache_repo = Mock()
+    cache_repo.get.return_value = None
+    cache_repo.save.return_value = None
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
     filter = {
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
@@ -100,6 +103,33 @@ def test_currency_exchange_rate_repository_get(exchange_rate):
     }
     result = exchange_rate_repo.get(**filter)
     assert db_repo.get.called
+    assert cache_repo.get.called
+    assert cache_repo.save.called
+    assert result.source_currency == exchange_rate.source_currency
+    assert result.exchanged_currency == exchange_rate.exchanged_currency
+    assert result.valuation_date == exchange_rate.valuation_date
+    assert result.rate_value == exchange_rate.rate_value
+    assert CurrencyExchangeRateEntity.to_string(
+        result) == CurrencyExchangeRateEntity.to_string(exchange_rate)
+
+
+@pytest.mark.unit
+def test_currency_exchange_rate_repository_cache_get(exchange_rate):
+    db_repo = Mock()
+    db_repo.get.return_value = None
+    cache_repo = Mock()
+    cache_repo.get.return_value = exchange_rate
+    cache_repo.save.return_value = None
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
+    filter = {
+        'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
+        'valuation_date': exchange_rate.valuation_date
+    }
+    result = exchange_rate_repo.get(**filter)
+    assert cache_repo.get.called
+    assert not cache_repo.save.called
+    assert not db_repo.get.called
     assert result.source_currency == exchange_rate.source_currency
     assert result.exchanged_currency == exchange_rate.exchanged_currency
     assert result.valuation_date == exchange_rate.valuation_date
@@ -114,7 +144,8 @@ def test_currency_exchange_rate_repository_get_rate_series(exchange_rate):
     rate_series = [round(random.uniform(0.8, 1.2), 6) for _ in range(num_of_rates)]
     db_repo = Mock()
     db_repo.get_rate_series.return_value = rate_series
-    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
+    cache_repo = Mock()
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
     filter = {
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
@@ -134,7 +165,8 @@ def test_currency_exchange_rate_repository_get_time_series(exchange_rate):
     time_series = [exchange_rate for _ in range(series_length)]
     db_repo = Mock()
     db_repo.get_time_series.return_value = time_series
-    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo)
+    cache_repo = Mock()
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
     filter = {
         'source_currency': exchange_rate.source_currency,
         'exchanged_currency': exchange_rate.exchanged_currency,
