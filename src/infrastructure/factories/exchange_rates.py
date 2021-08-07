@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from src.infrastructure.orm.cache.exchange_rate.repositories import (
+    CurrencyCacheRepository)
 from src.infrastructure.orm.db.exchange_rate.repositories import (
     CurrencyDatabaseRepository, CurrencyExchangeRateDatabaseRepository)
 from src.interface.controllers.exchange_rate import (
@@ -17,12 +19,20 @@ class CurrencyDatabaseRepositoryFactory:
         return CurrencyDatabaseRepository()
 
 
+class CurrencyCacheRepositoryFactory:
+
+    @staticmethod
+    def get():
+        return CurrencyCacheRepository()
+
+
 class CurrencyRepositoryFactory:
 
     @staticmethod
     def get():
         db_repo = CurrencyDatabaseRepositoryFactory.get()
-        return CurrencyRepository(db_repo)
+        cache_repo = CurrencyCacheRepositoryFactory.get()
+        return CurrencyRepository(db_repo, cache_repo)
 
 
 class CurrencyInteractorFactory:
