@@ -23,7 +23,6 @@ def test_currency_viewset_get(mock_objets, currency, client):
     mock_first.return_value = vars(currency)
     url = reverse('api:currencies-get', kwargs={'code': currency.code})
     response = client.get(url)
-    assert mock_first.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.OK.value
     assert hasattr(response, 'data')
@@ -40,7 +39,6 @@ def test_currency_viewset_get_entity_does_not_exist(mock_objets, client):
     mock_first.return_value = None
     url = reverse('api:currencies-get', kwargs={'code': 'code'})
     response = client.get(url)
-    assert mock_first.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.NOT_FOUND.value
     assert hasattr(response, 'data')
@@ -55,7 +53,6 @@ def test_currency_viewset_list(mock_objets, currency, client):
     mock_values.return_value = [vars(currency) for _ in range(num_of_currencies)]
     url = reverse('api:currencies-list')
     response = client.get(url)
-    assert mock_values.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.OK.value
     assert hasattr(response, 'data')
@@ -77,7 +74,6 @@ def test_exchange_rate_viewset_convert(mock_objets, exchange_rate, client):
     }
     url = f'{reverse("api:exchange-rate-convert")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert mock_first.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.OK.value
     assert hasattr(response, 'data')
@@ -99,7 +95,6 @@ def test_exchange_rate_viewset_convert_errors(mock_objets, exchange_rate, client
     }
     url = f'{reverse("api:exchange-rate-convert")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert not mock_first.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.BAD_REQUEST.value
     assert hasattr(response, 'data')
@@ -122,7 +117,6 @@ def test_exchange_rate_viewset_convert_entity_does_not_exist(mock_objets, exchan
     }
     url = f'{reverse("api:exchange-rate-convert")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert mock_first.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.NOT_FOUND.value
     assert hasattr(response, 'data')
@@ -144,7 +138,6 @@ def test_exchange_rate_viewset_list(mock_objets, exchange_rate, client):
     }
     url = f'{reverse("api:exchange-rate-list")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert mock_values.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.OK.value
     assert hasattr(response, 'data')
@@ -163,7 +156,6 @@ def test_exchange_rate_viewset_list_errors(mock_objets, exchange_rate, client):
     }
     url = f'{reverse("api:exchange-rate-list")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert not mock_values.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.BAD_REQUEST.value
     assert hasattr(response, 'data')
@@ -187,7 +179,6 @@ def test_exchange_rate_viewset_calculate_twr(mock_objets, exchange_rate, client)
     }
     url = f'{reverse("api:exchange-rate-calculate-twr")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert mock_values_list.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.OK.value
     assert hasattr(response, 'data')
@@ -207,7 +198,6 @@ def test_exchange_rate_viewset_calculate_twr_errors(mock_objets, exchange_rate, 
     }
     url = f'{reverse("api:exchange-rate-calculate-twr")}?{urllib.parse.urlencode(params)}'
     response = client.get(url)
-    assert not mock_values_list.called
     assert hasattr(response, 'status_code')
     assert response.status_code == HTTPStatus.BAD_REQUEST.value
     assert hasattr(response, 'data')

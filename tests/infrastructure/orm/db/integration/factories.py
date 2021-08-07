@@ -30,4 +30,4 @@ class CurrencyExchangeRateFactory(django.DjangoModelFactory):
     valuation_date = fuzzy.FuzzyDate(
         datetime.date.today() + datetime.timedelta(days=-10),
         datetime.date.today())
-    rate_value = fuzzy.FuzzyDecimal(0.5, 1.5)
+    rate_value = fuzzy.FuzzyDecimal(0.5, 1.5, 6)
