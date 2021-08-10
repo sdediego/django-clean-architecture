@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     # third-party
     'rest_framework',
     # project
-    'src.infrastructure.orm.db.exchange_rate'
+    'src.infrastructure.orm.db.exchange_rate',
+    'src.infrastructure.orm.db.provider',
 ]
 
 MIDDLEWARE = [

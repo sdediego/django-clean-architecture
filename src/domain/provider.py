@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import base64
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Union
 
 from marshmallow.exceptions import ValidationError
@@ -17,7 +17,7 @@ class ProviderEntity:
     name: str = None
     slug: str = None
     priority: int = None
-    settings: list = []
+    settings: list = field(default_factory=list)
 
     @staticmethod
     def to_string(provider: 'ProviderEntity') -> str:
