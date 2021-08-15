@@ -1,6 +1,11 @@
 # coding: utf-8
 
+import base64
 from dataclasses import dataclass, field
+
+from src.domain.constants import (
+    BOOLEAN_SETTING_TYPE, FLOAT_SETTING_TYPE, INTEGER_SETTING_TYPE,
+    SECRET_SETTING_TYPE, TEXT_SETTING_TYPE, URL_SETTING_TYPE)
 
 
 @dataclass
@@ -9,7 +14,7 @@ class ProviderEntity:
     slug: str = None
     priority: int = None
     enabled: bool = None
-    settings: list = field(default_factory=list)
+    settings: dict = field(default_factory=dict)
 
     @staticmethod
     def to_string(provider: 'ProviderEntity') -> str:
@@ -24,6 +29,21 @@ class ProviderSettingEntity:
     value: str = None
     description: str = None
 
+    def __post_init__(self):
+        if self.setting_type == BOOLEAN_SETTING_TYPE:
+            self.value = self.value == 'True'
+        elif self.setting_type == INTEGER_SETTING_TYPE:
+            self.value = int(self.value)
+        elif self.setting_type == FLOAT_SETTING_TYPE:
+            self.value = float(self.value)
+        elif self.setting_type == SECRET_SETTING_TYPE:
+            self.value = base64.decodebytes(self.value.encode()).decode()
+        elif self.setting_type in (TEXT_SETTING_TYPE, URL_SETTING_TYPE):
+            self.value = str(self.value)
+
     @staticmethod
     def to_string(setting: 'ProviderSettingEntity') -> str:
-        return f'{setting.provider} - {setting.key}: {setting.value}'
+        value = setting.value
+        if setting.setting_type == SECRET_SETTING_TYPE:
+            value = '*' * 10
+        return f'{setting.provider} - {setting.key}: {value}'
