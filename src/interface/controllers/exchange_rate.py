@@ -3,8 +3,7 @@
 from http import HTTPStatus
 from typing import Tuple
 
-from src.domain.exchange_rate import (
-    CurrencyExchangeAmountEntity, TimeWeightedRateEntity)
+from src.domain.exchange_rate import CurrencyExchangeAmountEntity, TimeWeightedRateEntity
 from src.interface.controllers.utils import calculate_time_weighted_rate
 from src.interface.repositories.exceptions import EntityDoesNotExist
 from src.interface.serializers.exchange_rate import (
@@ -12,11 +11,12 @@ from src.interface.serializers.exchange_rate import (
     CurrencyExchangeRateConvertSerializer, CurrencyExchangeRateListSerializer,
     CurrencyExchangeRateSerializer, TimeWeightedRateListSerializer,
     TimeWeightedRateSerializer)
+from src.usecases.exchange_rate import CurrencyInteractor, CurrencyExchangeRateInteractor
 
 
 class CurrencyController:
 
-    def __init__(self, currency_interator: object):
+    def __init__(self, currency_interator: CurrencyInteractor):
         self.currency_interator = currency_interator
 
     def get(self, code: str) -> Tuple[dict, int]:
@@ -36,7 +36,7 @@ class CurrencyController:
 
 class CurrencyExchangeRateController:
 
-    def __init__(self, exchange_rate_interactor: object):
+    def __init__(self, exchange_rate_interactor: CurrencyExchangeRateInteractor):
         self.exchange_rate_interactor = exchange_rate_interactor
 
     def convert(self, params: dict) -> Tuple[dict, int]:
@@ -62,7 +62,7 @@ class CurrencyExchangeRateController:
         data = CurrencyExchangeRateListSerializer().load(params)
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value
-        time_series = self.exchange_rate_interactor.get_all_time_series(**data)
+        time_series = self.exchange_rate_interactor.get_time_series(**data)
         return (
             CurrencyExchangeRateSerializer(many=True).dump(time_series),
             HTTPStatus.OK.value

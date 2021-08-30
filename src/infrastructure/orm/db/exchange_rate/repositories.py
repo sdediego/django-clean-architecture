@@ -50,10 +50,10 @@ class CurrencyExchangeRateDatabaseRepository:
 
     def get_time_series(self, source_currency: str, exchanged_currency: str,
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
-        qs = Q(source_currency=source_currency) & Q(
-            valuation_date__range=[date_from, date_to])
-        if exchanged_currency:
-            qs &= Q(exchanged_currency=exchanged_currency)
-        time_series = CurrencyExchangeRate.objects.filter(qs).values(
+        time_series = CurrencyExchangeRate.objects.filter(
+            source_currency=source_currency,
+            exchanged_currency__in=exchanged_currency.split(','),
+            valuation_date__range=[date_from, date_to]
+        ).values(
             'source_currency', 'exchanged_currency', 'valuation_date', 'rate_value')
         return list(map(lambda x: CurrencyExchangeRateEntity(**x), time_series))

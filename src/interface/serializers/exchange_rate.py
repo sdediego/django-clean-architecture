@@ -38,6 +38,7 @@ class CurrencyExchangeRateAmountSerializer(Schema):
 
 class CurrencyExchangeRateListSerializer(Schema):
     source_currency = fields.String(required=True)
+    exchanged_currency = fields.String(required=True)
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
 
@@ -48,6 +49,13 @@ class CurrencyExchangeRateListSerializer(Schema):
             data = {'errors': err.messages}
         return data
 
+    @post_load
+    def make_upper_code(self, data: dict, **kwargs) -> dict:
+        data['source_currency'] = data['source_currency'].upper()
+        data['exchanged_currency'] = ','.join(
+            list(map(str.upper, data['exchanged_currency'].split(','))))
+        return data
+
 
 class CurrencyExchangeRateSerializer(Schema):
     exchanged_currency = fields.String(required=True)
@@ -56,7 +64,12 @@ class CurrencyExchangeRateSerializer(Schema):
 
 
 class TimeWeightedRateListSerializer(CurrencyExchangeRateListSerializer):
-    exchanged_currency = fields.String(required=True)
+
+    @post_load
+    def make_upper_code(self, data: dict, **kwargs) -> dict:
+        data['source_currency'] = data['source_currency'].upper()
+        data['exchanged_currency'] = data['exchanged_currency'].upper()
+        return data
 
 
 class TimeWeightedRateSerializer(Schema):

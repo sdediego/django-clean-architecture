@@ -42,7 +42,3 @@ class CurrencyExchangeRateInteractor:
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         return self.exchange_rate_repo.get_time_series(
             source_currency, exchanged_currency, date_from, date_to)
-
-    def get_all_time_series(self, source_currency: str, date_from: str,
-                            date_to: str) -> List[CurrencyExchangeRateEntity]:
-        return self.get_time_series(source_currency, None, date_from, date_to)
