@@ -63,10 +63,12 @@ def test_currency_exchange_rate_amount_serializer(exchange_rate):
 
 @pytest.mark.unit
 def test_currency_exchange_rate_list_serializer(exchange_rate):
+    exchanged_currency = exchange_rate.exchanged_currency * random.randint(1, 5)
     date_from = datetime.date.today() + datetime.timedelta(days=-5)
     date_to = datetime.date.today()
     data = {
         'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchanged_currency,
         'date_from': date_from.strftime('%Y-%m-%d'),
         'date_to': date_to.strftime('%Y-%m-%d')
     }

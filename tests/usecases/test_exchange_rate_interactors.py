@@ -115,22 +115,3 @@ def test_currency_exchange_rate_interactor_get_time_series(exchange_rate):
     assert isinstance(result, list)
     assert len(result) == series_length
     assert all([isinstance(cer, CurrencyExchangeRateEntity) for cer in result])
-
-
-@pytest.mark.unit
-def test_currency_exchange_rate_interactor_get_all_time_series(exchange_rate):
-    series_length = random.randint(1, 10)
-    time_series = [exchange_rate for _ in range(series_length)]
-    exchange_rate_repo = Mock()
-    exchange_rate_repo.get_time_series.return_value = time_series
-    exchange_rate_interactor = CurrencyExchangeRateInteractor(exchange_rate_repo)
-    filter = {
-        'source_currency': exchange_rate.source_currency,
-        'date_from': datetime.date.today() + datetime.timedelta(days=-series_length),
-        'date_to': datetime.date.today()
-    }
-    result = exchange_rate_interactor.get_all_time_series(**filter)
-    assert exchange_rate_repo.get_time_series.called
-    assert isinstance(result, list)
-    assert len(result) == series_length
-    assert all([isinstance(cer, CurrencyExchangeRateEntity) for cer in result])

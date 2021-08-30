@@ -118,17 +118,18 @@ def test_exchange_rate_controller_list(exchange_rate):
     series_length = random.randint(1, 10)
     params = {
         'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
         'date_from': (
             datetime.date.today() + datetime.timedelta(days=-series_length)
         ).strftime('%Y-%m-%d'),
         'date_to': datetime.date.today().strftime('%Y-%m-%d')
     }
     exchange_rate_interactor = Mock()
-    exchange_rate_interactor.get_all_time_series.return_value = [
+    exchange_rate_interactor.get_time_series.return_value = [
         exchange_rate for _ in range(series_length)]
     controller = CurrencyExchangeRateController(exchange_rate_interactor)
     data, status = controller.list(params)
-    assert exchange_rate_interactor.get_all_time_series.called
+    assert exchange_rate_interactor.get_time_series.called
     assert status == HTTPStatus.OK.value
     assert isinstance(data, list)
     assert all([key in exchange_rate.keys() for key in [

@@ -103,7 +103,7 @@ def test_exchange_rate_db_repository_get_time_series():
     )
     result = CurrencyExchangeRateDatabaseRepository().get_time_series(
         source_currency=currencies[0],
-        exchanged_currency= currencies[1],
+        exchanged_currency= currencies[1].code,
         date_from=datetime.date.today() + datetime.timedelta(days=-batch_number),
         date_to=datetime.date.today()
     )

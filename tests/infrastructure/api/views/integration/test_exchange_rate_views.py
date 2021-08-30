@@ -133,6 +133,7 @@ def test_exchange_rate_viewset_list(mock_objets, exchange_rate, client):
     mock_values.return_value = [vars(exchange_rate) for _ in range(num_of_rates)]
     params = {
         'source_currency': exchange_rate.source_currency,
+        'exchanged_currency': exchange_rate.exchanged_currency,
         'date_from': datetime.date.today() + datetime.timedelta(days=-num_of_rates),
         'date_to': datetime.date.today()
     }
