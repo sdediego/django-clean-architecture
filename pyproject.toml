@@ -12,6 +12,7 @@ psycopg2 = "^2.9.1"
 djangorestframework = "^3.12.4"
 marshmallow = "^3.13.0"
 django-redis = "^5.0.0"
+requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.7"
