@@ -1,0 +1,112 @@
+{
+	"availableCurrencies": [
+		{
+			"code": "AUD",
+			"name": "Austalian Dollar"
+		},
+		{
+			"code": "BGN",
+			"name": "Bulgarian Lev"
+		},
+		{
+			"code": "BRL",
+			"name": "Brazilian Real"
+		},
+		{
+			"code": "CAD",
+			"name": "Canadian Dollar"
+		},
+		{
+			"code": "CHF",
+			"name": "Swiss Franc"
+		},
+		{
+			"code": "CNY",
+			"name": "Chinese Yuan"
+		},
+		{
+			"code": "CZK",
+			"name": "Czech Koruna"
+		},
+		{
+			"code": "DKK",
+			"name": "Danish Krone"
+		},
+		{
+			"code": "EUR",
+			"name": "Euro"
+		},
+		{
+			"code": "GBP",
+			"name": "Pound Sterling"
+		},
+		{
+			"code": "HKD",
+			"name": "Hong Kong Dollar"
+		},
+		{
+			"code": "HUF",
+			"name": "Hungarian Forint"
+		},
+		{
+			"code": "ILS",
+			"name": "Israeli New Shekel"
+		},
+		{
+			"code": "INR",
+			"name": "Indian Rupee"
+		},
+		{
+			"code": "JPY",
+			"name": "Japanese Yen"
+		},
+		{
+			"code": "MXN",
+			"name": "Mexican Peso"
+		},
+		{
+			"code": "NOK",
+			"name": "Norwegian Krone"
+		},
+		{
+			"code": "NZD",
+			"name": "New Zealand Dollar"
+		},
+		{
+			"code": "PLN",
+			"name": "Polish Zloty"
+		},
+		{
+			"code": "RON",
+			"name": "Romanian Leu"
+		},
+		{
+			"code": "RUB",
+			"name": "Russian Ruble"
+		},
+		{
+			"code": "SEK",
+			"name": "Swedish Krona"
+		},
+		{
+			"code": "SGD",
+			"name": "Singapore Dollar"
+		},
+		{
+			"code": "TRY",
+			"name": "Turkish Lira"
+		},
+		{
+			"code": "UAH",
+			"name": "Ukrainian Hryvnia"
+		},
+		{
+			"code": "USD",
+			"name": "United States Dollar"
+		},
+		{
+			"code": "ZAR",
+			"name": "South African Rand"
+		}
+	]
+}
