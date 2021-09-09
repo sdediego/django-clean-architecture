@@ -12,7 +12,7 @@ from src.domain.provider import ProviderEntity
 
 
 class ProviderBaseDriver:
-    HEADERS = {'accept': 'application/json'}
+    HEADERS = {'Accept': 'application/json'}
     ENDPOINTS = {}
 
     def __init__(self, provider: ProviderEntity):
@@ -72,7 +72,7 @@ class ProviderBaseDriver:
                  url_params: dict = None) -> dict:
         request = self._build_request(endpoint, data, params, url_params)
         try:
-            response = requests.request(request)
+            response = requests.request(**request)
             response.raise_for_status()
         except RequestException as err:
             if not self._has_response_error(err.response):

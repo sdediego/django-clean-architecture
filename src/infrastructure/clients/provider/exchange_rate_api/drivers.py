@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import asyncio
-from itertools import repeat
+from itertools import chain, repeat
 from typing import List
 
 from requests import Response
@@ -25,12 +25,12 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
     ENDPOINTS = {
         CURRENCIES: {
             'method': 'get',
-            'path': 'codes/',
+            'path': 'codes',
             'serializer_class': CurrencySerializer,
         },
         HISTORICAL_RATE: {
             'method': 'get',
-            'path': 'history/{currency}/{year}/{month}/{day}/',
+            'path': 'history/{currency}/{year}/{month}/{day}',
             'serializer_class': ExchangeRateSerializer,
         }
     }
@@ -42,7 +42,7 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
 
     def _get_headers(self) -> dict:
         headers = super()._get_headers()
-        headers.update({'api-key': self.api_key})
+        headers.update({'Authorization': f'Bearer {self.api_key}'})
         return headers
 
     def _has_response_error(self, response: Response) -> bool:
@@ -78,15 +78,17 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
             'day': day,
         }
         response = self._request(self.HISTORICAL_RATE, url_params=url_params)
-        response.update({'exchanged_currency': exchanged_currency})
-        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)
+        response.update({'symbols': exchanged_currency})
+        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)[0]
         return CurrencyExchangeRateEntity(**exchange_rate)
 
     @async_event_loop
     async def get_time_series(self, source_currency: str, exchanged_currency: str,
                               date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
-        async def request(endpoint: str, url_params: dict) -> dict:
-            return super()._request(endpoint, url_params=url_params)
+        async def request(endpoint: str, params: dict, url_params: dict) -> dict:
+            response = self._request(endpoint, url_params=url_params)
+            response.update(params)
+            return response
 
         url_params = []
         for business_day in get_business_days(date_from, date_to):
@@ -97,13 +99,11 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
                 'month': month,
                 'day': day,
             })
-        responses = [
-            result.update({'exchanged_currency': exchanged_currency})
-            async for result in await asyncio.gather(*list(
-                map(request, repeat(self.HISTORICAL_RATE), url_params)))
-        ]
-        timeseries = list(
-            map(self._deserialize_response, repeat(self.HISTORICAL_RATE), responses))
+        params = {'symbols': exchanged_currency}
+        responses = await asyncio.gather(*list(
+            map(request, repeat(self.HISTORICAL_RATE), repeat(params), url_params)))
+        timeseries = list(chain(*map(
+            self._deserialize_response, repeat(self.HISTORICAL_RATE), responses)))
         return [
             CurrencyExchangeRateEntity(**exchange_rate) for exchange_rate in timeseries
         ]

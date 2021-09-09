@@ -1,10 +1,14 @@
 # coding: utf-8
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, EXCLUDE
 from marshmallow.decorators import post_load, pre_load
 
 
 class CurrencySerializer(Schema):
+
+    class Meta:
+        unknown = EXCLUDE
+
     currencies = fields.Dict(
         data_key='symbols', keys=fields.String(), values=fields.String(), required=True)
 
@@ -16,6 +20,10 @@ class CurrencySerializer(Schema):
 
 
 class ExchangeRateSerializer(Schema):
+
+    class Meta:
+        unknown = EXCLUDE
+
     source_currency = fields.String(data_key='base', required=True)
     exchanged_currency = fields.String(required=True)
     valuation_date = fields.Date(data_key='date', required=True)
@@ -31,6 +39,10 @@ class ExchangeRateSerializer(Schema):
 
 
 class TimeSeriesSerializer(Schema):
+
+    class Meta:
+        unknown = EXCLUDE
+
     source_currency = fields.String(data_key='base', required=True)
     rates = fields.Dict(
         keys=fields.String(),
@@ -38,13 +50,16 @@ class TimeSeriesSerializer(Schema):
         required=True)
 
     @post_load
-    def make_exchange_rates(self, data: dict, **kwargs) -> dict:
+    def make_exchange_rates(self, data: dict, **kwargs) -> list:
+        source_currency = data.get('source_currency')
+        rates = data.get('rates')
         return [
             {
-                'source_currency': data['source_currency'],
+                'source_currency': source_currency,
                 'exchanged_currency': exchanged_currency,
                 'valuation_date': date,
-                'rate_value': round(float(rate), 6)
+                'rate_value': round(float(rate_value), 6)
             }
-            for date, rates in data['rates'].items() for exchanged_currency, rate in rates
+            for date, exchange_rates in rates.items()
+            for exchanged_currency, rate_value in exchange_rates.items()
         ]

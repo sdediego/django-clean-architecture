@@ -2,7 +2,7 @@
 
 import asyncio
 import json
-from itertools import repeat
+from itertools import chain, repeat
 from typing import List
 
 from requests import Response
@@ -25,7 +25,7 @@ class XChangeAPIDriver(ProviderBaseDriver):
     ENDPOINTS = {
         HISTORICAL_RATE: {
             'method': 'get',
-            'path': 'historical/{date}/',
+            'path': 'historical/{date}',
             'serializer_class': ExchangeRateSerializer,
         }
     }
@@ -58,31 +58,35 @@ class XChangeAPIDriver(ProviderBaseDriver):
         raise XChangeAPIDriverError(message=message, code=status_code)
 
     def get_currencies(self) -> List[CurrencyEntity]:
-        with open('currencies.json', 'r') as currencies_file:
+        with open('./currencies.json', 'r') as currencies_file:
             data = json.load(currencies_file)
         return [CurrencyEntity(**currency) for currency in data['availableCurrencies']]
 
     def get_exchange_rate(self, source_currency: str, exchanged_currency: str,
                           date: str = None) -> CurrencyExchangeRateEntity:
         url_params = {'date': date or get_last_business_day()}
-        params = {'base': source_currency, 'symbols': exchanged_currency}
+        params = {'base': source_currency}
         response = self._request(self.HISTORICAL_RATE, params=params, url_params=url_params)
-        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)
+        response.update({'symbols': exchanged_currency})
+        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)[0]
         return CurrencyExchangeRateEntity(**exchange_rate)
 
     @async_event_loop
     async def get_time_series(self, source_currency: str, exchanged_currency: str,
                               date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         async def request(endpoint: str, params: dict, url_params: dict) -> dict:
-            return super()._request(endpoint, params=params, url_params=url_params)
+            symbols = params.get('symbols')
+            response = self._request(endpoint, params=params, url_params=url_params)
+            response.update({'symbols': symbols})
+            return response
 
         business_days = get_business_days(date_from, date_to)
         url_params = [{'date': business_day} for business_day in business_days]
         params = {'base': source_currency, 'symbols': exchanged_currency}
         responses = await asyncio.gather(*list(
             map(request, repeat(self.HISTORICAL_RATE), repeat(params), url_params)))
-        timeseries = list(
-            map(self._deserialize_response, repeat(self.HISTORICAL_RATE), responses))
+        timeseries = list(chain(*map(
+            self._deserialize_response, repeat(self.HISTORICAL_RATE), responses)))
         return [
             CurrencyExchangeRateEntity(**exchange_rate) for exchange_rate in timeseries
         ]

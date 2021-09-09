@@ -21,17 +21,17 @@ class FixerDriver(ProviderBaseDriver):
     ENDPOINTS = {
         CURRENCIES: {
             'method': 'get',
-            'path': 'symbols/',
+            'path': 'symbols',
             'serializer_class': CurrencySerializer,
         },
         HISTORICAL_RATE: {
             'method': 'get',
-            'path': '{date}/',
+            'path': '{date}',
             'serializer_class': ExchangeRateSerializer,
         },
         TIME_SERIES: {
             'method': 'get',
-            'path': 'timeseries/',
+            'path': 'timeseries',
             'serializer_class': TimeSeriesSerializer,
         }
     }
