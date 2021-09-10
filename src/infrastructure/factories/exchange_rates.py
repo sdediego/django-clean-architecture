@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from src.infrastructure.factories.provider import ProviderClientInteractorFactory
 from src.infrastructure.orm.cache.exchange_rate.repositories import (
     CurrencyCacheRepository, CurrencyExchangeRateCacheRepository)
 from src.infrastructure.orm.db.exchange_rate.repositories import (
@@ -48,7 +49,11 @@ class CurrencyViewSetFactory:
     @staticmethod
     def create():
         currency_interactor = CurrencyInteractorFactory.get()
-        return CurrencyController(currency_interactor)
+        provider_client_interactor = ProviderClientInteractorFactory.get()
+        return CurrencyController(
+            currency_interactor,
+            provider_client_interactor
+        )
 
 
 class CurrencyExchangeRateDatabaseRepositoryFactory:
@@ -87,4 +92,8 @@ class CurrencyExchangeRateViewSetFactory:
     @staticmethod
     def create():
         exchange_rate_interactor = CurrencyExchangeRateInteractorFactory.get()
-        return CurrencyExchangeRateController(exchange_rate_interactor)
+        provider_client_interactor = ProviderClientInteractorFactory.get()
+        return CurrencyExchangeRateController(
+            exchange_rate_interactor,
+            provider_client_interactor
+        )
