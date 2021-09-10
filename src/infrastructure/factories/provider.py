@@ -5,7 +5,7 @@ from src.infrastructure.orm.cache.provider.repositores import ProviderCacheRepos
 from src.infrastructure.orm.db.provider.repositories import ProviderDatabaseRepository
 from src.interface.clients.provider import ProviderClient
 from src.interface.repositories.provider import ProviderRepository
-from src.usecases.provider import ProviderInteractor
+from src.usecases.provider import ProviderInteractor, ProviderClientInteractor
 
 
 class ProviderDatabaseRepositoryFactory:
@@ -53,3 +53,11 @@ class ProviderClientFactory:
     def get():
         provider_driver = ProviderDriverFactory.get()
         return ProviderClient(provider_driver)
+
+
+class ProviderClientInteractorFactory:
+
+    @staticmethod
+    def get():
+        provider_client = ProviderClientFactory.get()
+        return ProviderClientInteractor(provider_client)
