@@ -1,11 +1,11 @@
 # coding: utf-8
 
+from http import HTTPStatus
 from importlib import import_module
 from typing import Any, List
 
 from src.domain.provider import ProviderEntity
 from src.infrastructure.clients.provider.base import ProviderBaseDriver
-from src.infrastructure.clients.provider.exceptions import ProviderDriverError
 from src.usecases.provider import ProviderInteractor
 
 
@@ -14,7 +14,7 @@ class ProviderMasterDriver:
         'currency_get': 'get_currencies',
         'currency_list': 'get_currencies',
         'exchange_rate_calculate_twr': 'get_time_series',
-        'exchange_rate_conver': 'get_exchange_rate',
+        'exchange_rate_convert': 'get_exchange_rate',
         'exchange_rate_list': 'get_time_series',
     }
 
@@ -35,8 +35,8 @@ class ProviderMasterDriver:
             driver = getattr(module, f'{driver_name}Driver')
             yield driver(provider)
 
-    def get_exchange_rate_data(self, action: str, **kwargs: dict) -> Any:
-        error = None
+    def fetch_data(self, action: str, **kwargs: dict) -> Any:
+        error = 'Unable to fetch data from remote server'
         for driver in self._get_driver_by_priority():
             method = getattr(driver, self.ACTIONS.get(action, None))
             try:
@@ -44,10 +44,13 @@ class ProviderMasterDriver:
             except Exception as err:
                 error = err
             else:
-                break
+                if response:
+                    break
         else:
-            if error is issubclass(error, ProviderDriverError):
-                message, code, status = error.message, error.code, error.status
-                raise ProviderDriverError(message, code, status)
-            raise error
+            response = {
+                'error': error.message if hasattr(
+                    error, 'message') else str(error),
+                'status_code': error.code if hasattr(
+                    error, 'code') else HTTPStatus.INTERNAL_SERVER_ERROR.value
+            }
         return response
