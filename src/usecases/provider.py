@@ -19,5 +19,5 @@ class ProviderClientInteractor:
     def __init__(self, provider_client: object):
         self.provider_client = provider_client
 
-    def get_exchange_rate_data(self, action: str, **kwargs: dict) -> Any:
-        return self.provider_client.get_exchange_rate_data(action, **kwargs)
+    def fetch_data(self, action: str, **kwargs: dict) -> Any:
+        return self.provider_client.fetch_data(action, **kwargs)
