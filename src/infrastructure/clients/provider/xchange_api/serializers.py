@@ -32,7 +32,8 @@ class ExchangeRateSerializer(Schema):
                 'exchanged_currency': exchanged_currency,
                 'valuation_date': data.get('valuation_date'),
                 'rate_value': round(
-                    float(data.get('rates').get(exchanged_currency, 0)), 6)
+                    float(data.get('rates').get(exchanged_currency)), 6)
             }
             for exchanged_currency in exchanged_currencies
+            if data.get('rates').get(exchanged_currency) is not None
         ]
