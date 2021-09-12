@@ -3,9 +3,10 @@
 from http import HTTPStatus
 from typing import Tuple
 
-from src.domain.exchange_rate import CurrencyExchangeAmountEntity, TimeWeightedRateEntity
+from src.domain.exchange_rate import (
+    CurrencyExchangeAmountEntity, CurrencyExchangeRateEntity, TimeWeightedRateEntity)
 from src.interface.controllers.utils import (
-    calculate_time_weighted_rate, filter_currencies)
+    calculate_time_weighted_rate, filter_currencies, get_rate_series)
 from src.interface.repositories.exceptions import EntityDoesNotExist
 from src.interface.serializers.exchange_rate import (
     CurrencySerializer, CurrencyExchangeRateAmountSerializer,
@@ -48,8 +49,10 @@ class CurrencyController:
 
 class CurrencyExchangeRateController:
 
-    def __init__(self, exchange_rate_interactor: CurrencyExchangeRateInteractor):
+    def __init__(self, exchange_rate_interactor: CurrencyExchangeRateInteractor,
+                 provider_client_interactor: ProviderClientInteractor):
         self.exchange_rate_interactor = exchange_rate_interactor
+        self.provider_client_interactor = provider_client_interactor
 
     def convert(self, params: dict) -> Tuple[dict, int]:
         data = CurrencyExchangeRateConvertSerializer().load(params)
@@ -59,7 +62,10 @@ class CurrencyExchangeRateController:
         try:
             exchange_rate = self.exchange_rate_interactor.get_latest(**data)
         except EntityDoesNotExist as err:
-            return {'error': err.message}, HTTPStatus.NOT_FOUND.value
+            exchange_rate = self.provider_client_interactor.fetch_data(
+                'exchange_rate_convert', **data)
+            if not isinstance(exchange_rate, CurrencyExchangeRateEntity):
+                return {'error': err.message}, HTTPStatus.NOT_FOUND.value
         exchanged_amount = CurrencyExchangeAmountEntity(
             exchanged_currency=data.get('exchanged_currency'),
             exchanged_amount=exchange_rate.calculate_amount(amount),
@@ -74,9 +80,14 @@ class CurrencyExchangeRateController:
         data = CurrencyExchangeRateListSerializer().load(params)
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value
-        time_series = self.exchange_rate_interactor.get_time_series(**data)
+        timeseries = self.exchange_rate_interactor.get_time_series(**data)
+        if not timeseries:
+            timeseries = self.provider_client_interactor.fetch_data(
+                'exchange_rate_list', **data)
+            if 'error' in timeseries:
+                timeseries = []
         return (
-            CurrencyExchangeRateSerializer(many=True).dump(time_series),
+            CurrencyExchangeRateSerializer(many=True).dump(timeseries),
             HTTPStatus.OK.value
         )
 
@@ -85,6 +96,12 @@ class CurrencyExchangeRateController:
         if 'errors' in data:
             return data, HTTPStatus.BAD_REQUEST.value
         rate_series = self.exchange_rate_interactor.get_rate_series(**data)
+        if not rate_series:
+            timeseries = self.provider_client_interactor.fetch_data(
+                'exchange_rate_calculate_twr', **data)
+            if 'error' in timeseries:
+                return {'error': timeseries['error']}, timeseries['status_code']
+            rate_series = get_rate_series(timeseries)
         time_weighted_rate = TimeWeightedRateEntity(
             time_weighted_rate=calculate_time_weighted_rate(rate_series)
         )
