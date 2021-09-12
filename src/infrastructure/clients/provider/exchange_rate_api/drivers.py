@@ -79,8 +79,9 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
         }
         response = self._request(self.HISTORICAL_RATE, url_params=url_params)
         response.update({'symbols': exchanged_currency})
-        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)[0]
-        return CurrencyExchangeRateEntity(**exchange_rate)
+        loaded_reponse = self._deserialize_response(self.HISTORICAL_RATE, response)
+        exchange_rate = loaded_reponse[0] if len(loaded_reponse) > 0 else None
+        return CurrencyExchangeRateEntity(**exchange_rate) if exchange_rate else None
 
     @async_event_loop
     async def get_time_series(self, source_currency: str, exchanged_currency: str,
