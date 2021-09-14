@@ -2,6 +2,7 @@
 
 import base64
 from dataclasses import dataclass, field
+from typing import Any
 
 from src.domain.constants import (
     BOOLEAN_SETTING_TYPE, FLOAT_SETTING_TYPE, INTEGER_SETTING_TYPE,
@@ -37,7 +38,7 @@ class ProviderSettingEntity:
         elif self.setting_type == FLOAT_SETTING_TYPE:
             self.value = float(self.value)
         elif self.setting_type == SECRET_SETTING_TYPE:
-            self.value = base64.decodebytes(self.value.encode()).decode()
+            self.value = self.decode_secret(self.value)
         elif self.setting_type in (TEXT_SETTING_TYPE, URL_SETTING_TYPE):
             self.value = str(self.value)
 
@@ -47,3 +48,13 @@ class ProviderSettingEntity:
         if setting.setting_type == SECRET_SETTING_TYPE:
             value = '*' * 10
         return f'{setting.provider} - {setting.key}: {value}'
+
+    @staticmethod
+    def decode_secret(value: Any) -> str:
+        value = str(value)
+        return base64.decodebytes(value.encode()).decode()
+
+    @staticmethod
+    def encode_secret(value: Any) -> str:
+        value = str(value)
+        return base64.encodebytes(value.encode()).decode()

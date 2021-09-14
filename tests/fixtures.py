@@ -85,8 +85,7 @@ def provider_setting(provider) -> ProviderSettingEntity:
         (BOOLEAN_SETTING_TYPE, random.choice(['True', 'False'])),
         (INTEGER_SETTING_TYPE, random.randint(1, 99)),
         (FLOAT_SETTING_TYPE, random.uniform(1.00, 99.99)),
-        (SECRET_SETTING_TYPE, base64.encodebytes(
-            'secret_string'.encode()).decode()),
+        (SECRET_SETTING_TYPE, ProviderSettingEntity.encode_secret('secret')),
         (TEXT_SETTING_TYPE, generate_random_string(10)),
         (URL_SETTING_TYPE, generate_random_string(10)),
     ])

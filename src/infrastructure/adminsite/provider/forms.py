@@ -6,6 +6,7 @@ from django.core.validators import URLValidator
 from django.forms import ModelForm, ValidationError
 
 from src.domain.constants import SECRET_SETTING_TYPE
+from src.domain.provider import ProviderSettingEntity
 from src.infrastructure.orm.db.provider.models import ProviderSetting
 
 
@@ -65,6 +66,6 @@ class ProviderSettingForm(ModelForm):
     def save(self, commit: bool = True):
         if self.cleaned_data.get('setting_type') == SECRET_SETTING_TYPE \
                 and 'value' in self.changed_data:
-            self.instance.value = base64.encodebytes(
-                self.cleaned_data.get('value').encode()).decode()
+            self.instance.value = ProviderSettingEntity.encode_secret(
+                self.cleaned_data.get('value'))
         return super().save(commit)
