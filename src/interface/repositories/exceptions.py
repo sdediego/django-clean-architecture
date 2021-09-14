@@ -2,7 +2,7 @@
 
 class EntityError(Exception):
 
-    def __init__(self, message: str, *args, **kwargs):
+    def __init__(self, message: str = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.message = message
 
