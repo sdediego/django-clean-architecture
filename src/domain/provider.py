@@ -47,7 +47,7 @@ class ProviderSettingEntity:
         value = setting.value
         if setting.setting_type == SECRET_SETTING_TYPE:
             value = '*' * 10
-        return f'{setting.provider} - {setting.key}: {value}'
+        return f'{setting.provider.name} - {setting.key}: {value}'
 
     @staticmethod
     def decode_secret(value: Any) -> str:

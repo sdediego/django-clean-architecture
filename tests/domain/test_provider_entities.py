@@ -38,15 +38,15 @@ def test_provider_setting_entity_attrs(provider_setting):
 @pytest.mark.unit
 def test_provider_setting_entity_post_init(provider_setting):
     if provider_setting.setting_type == BOOLEAN_SETTING_TYPE:
-        assert provider_setting.value in (True, False)
+        assert isinstance(provider_setting.value, bool)
     elif provider_setting.setting_type == INTEGER_SETTING_TYPE:
-        assert isinstance(int(provider_setting.value), int)
+        assert isinstance(provider_setting.value, int)
     elif provider_setting.setting_type == FLOAT_SETTING_TYPE:
-        assert isinstance(float(provider_setting.value), float)
+        assert isinstance(provider_setting.value, float)
     elif provider_setting.setting_type == SECRET_SETTING_TYPE:
         assert isinstance(provider_setting.value, str)
     elif provider_setting.setting_type in (TEXT_SETTING_TYPE, URL_SETTING_TYPE):
-        assert isinstance(str(provider_setting.value), str)
+        assert isinstance(provider_setting.value, str)
 
 
 @pytest.mark.unit
@@ -65,6 +65,6 @@ def test_provider_setting_entity_representation(provider_setting):
         value = '*' * 10
 
     assert isinstance(entity_str, str)
-    assert str(provider_setting.provider) in entity_str
+    assert str(provider_setting.provider.name) in entity_str
     assert provider_setting.key in entity_str
     assert str(value) in entity_str
