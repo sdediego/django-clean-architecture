@@ -1,0 +1,97 @@
+[{
+    "model": "provider.provider",
+    "pk": 1,
+    "fields": {
+      "name": "Fixer",
+      "slug": "fixer",
+      "priority": 1,
+      "enabled": true
+    }
+  }, {
+    "model": "provider.provider",
+    "pk": 2,
+    "fields": {
+      "name": "XChangeAPI",
+      "slug": "xchangeapi",
+      "priority": 2,
+      "enabled": true
+    }
+  }, {
+    "model": "provider.provider",
+    "pk": 3,
+    "fields": {
+      "name": "ExchangeRateAPI",
+      "slug": "exchangerateapi",
+      "priority": 3,
+      "enabled": true
+    }
+  }, {
+    "model": "provider.provider",
+    "pk": 4,
+    "fields": {
+      "name": "Mock",
+      "slug": "mock",
+      "priority": 4,
+      "enabled": false
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 8,
+    "fields": {
+      "provider": 1,
+      "setting_type": "url",
+      "key": "api_url",
+      "value": "http://data.fixer.io/api/",
+      "description": "Refers to Base URL which all Fixer API request endpoints and URLs are based on."
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 9,
+    "fields": {
+      "provider": 1,
+      "setting_type": "secret",
+      "key": "access_key",
+      "value": "ZmJMzZMGQ1MlhMDU5ODM2TlhYjVhYjc0NZThkjgwNzk=\n",
+      "description": "A unique key assigned to each Fixer API account used to authenticate with the API."
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 10,
+    "fields": {
+      "provider": 2,
+      "setting_type": "url",
+      "key": "api_url",
+      "value": "https://api.xchangeapi.com/",
+      "description": "The URL address that you need to use to connect to the API."
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 11,
+    "fields": {
+      "provider": 2,
+      "setting_type": "secret",
+      "key": "api_key",
+      "value": "aGl1TDRMGdaMzEclFOcUt4Znc4RWlHVnZEaTS2k0UmU=\n",
+      "description": "The API key to allow access to the API."
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 12,
+    "fields": {
+      "provider": 3,
+      "setting_type": "url",
+      "key": "api_url",
+      "value": "https://v6.exchangerate-api.com/v6/",
+      "description": "The base URL which API request endpoints are based on."
+    }
+  }, {
+    "model": "provider.providersetting",
+    "pk": 13,
+    "fields": {
+      "provider": 3,
+      "setting_type": "secret",
+      "key": "api_key",
+      "value": "YzkGE3zZNzMTE5Zjk4NZjJlDk3k2OWY0\n",
+      "description": "The API key to get access to the API."
+    }
+  }]
