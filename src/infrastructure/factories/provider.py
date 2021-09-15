@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from src.infrastructure.clients.provider.drivers import ProviderMasterDriver
-from src.infrastructure.orm.cache.provider.repositores import ProviderCacheRepository
+from src.infrastructure.orm.cache.provider.repositories import ProviderCacheRepository
 from src.infrastructure.orm.db.provider.repositories import ProviderDatabaseRepository
 from src.interface.clients.provider import ProviderClient
 from src.interface.repositories.provider import ProviderRepository
