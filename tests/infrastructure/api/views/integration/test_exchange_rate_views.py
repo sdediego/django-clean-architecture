@@ -10,12 +10,13 @@ from django.urls import reverse
 
 from src.infrastructure.orm.db.exchange_rate.models import (
     Currency, CurrencyExchangeRate)
+from src.usecases.provider import ProviderClientInteractor
 from tests.fixtures import currency, exchange_rate
 
 
 @patch.object(Currency, 'objects')
-def test_currency_viewset_get(mock_objets, currency, client):
-    mock_filter = mock_objets.filter
+def test_currency_viewset_get(mock_objects, currency, client):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -30,8 +31,11 @@ def test_currency_viewset_get(mock_objets, currency, client):
 
 
 @patch.object(Currency, 'objects')
-def test_currency_viewset_get_entity_does_not_exist(mock_objets, client):
-    mock_filter = mock_objets.filter
+@patch.object(ProviderClientInteractor, 'fetch_data')
+def test_currency_viewset_get_entity_does_not_exist(
+        mock_fetch_data, mock_objects, client):
+    mock_fetch_data.return_value = []
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -47,9 +51,9 @@ def test_currency_viewset_get_entity_does_not_exist(mock_objets, client):
 
 
 @patch.object(Currency, 'objects')
-def test_currency_viewset_list(mock_objets, currency, client):
+def test_currency_viewset_list(mock_objects, currency, client):
     num_of_currencies = random.randint(1, 10)
-    mock_values = mock_objets.values
+    mock_values = mock_objects.values
     mock_values.return_value = [vars(currency) for _ in range(num_of_currencies)]
     url = reverse('api:currencies-list')
     response = client.get(url)
@@ -60,8 +64,8 @@ def test_currency_viewset_list(mock_objets, currency, client):
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_convert(mock_objets, exchange_rate, client):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_viewset_convert(mock_objects, exchange_rate, client):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -81,8 +85,8 @@ def test_exchange_rate_viewset_convert(mock_objets, exchange_rate, client):
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_convert_errors(mock_objets, exchange_rate, client):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_viewset_convert_errors(mock_objects, exchange_rate, client):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -103,8 +107,11 @@ def test_exchange_rate_viewset_convert_errors(mock_objets, exchange_rate, client
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_convert_entity_does_not_exist(mock_objets, exchange_rate, client):
-    mock_filter = mock_objets.filter
+@patch.object(ProviderClientInteractor, 'fetch_data')
+def test_exchange_rate_viewset_convert_entity_does_not_exist(
+        mock_fetch_data, mock_objects, exchange_rate, client):
+    mock_fetch_data.return_value = None
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -125,9 +132,9 @@ def test_exchange_rate_viewset_convert_entity_does_not_exist(mock_objets, exchan
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_list(mock_objets, exchange_rate, client):
+def test_exchange_rate_viewset_list(mock_objects, exchange_rate, client):
     num_of_rates = random.randint(1, 10)
-    mock_filter = mock_objets.filter
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = [vars(exchange_rate) for _ in range(num_of_rates)]
@@ -146,8 +153,8 @@ def test_exchange_rate_viewset_list(mock_objets, exchange_rate, client):
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_list_errors(mock_objets, exchange_rate, client):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_viewset_list_errors(mock_objects, exchange_rate, client):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = None
@@ -165,9 +172,9 @@ def test_exchange_rate_viewset_list_errors(mock_objets, exchange_rate, client):
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_calculate_twr(mock_objets, exchange_rate, client):
+def test_exchange_rate_viewset_calculate_twr(mock_objects, exchange_rate, client):
     num_of_rates = random.randint(1, 10)
-    mock_filter = mock_objets.filter
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values_list = mock_filter.return_value.values_list
     mock_values_list.return_value = [
@@ -187,8 +194,8 @@ def test_exchange_rate_viewset_calculate_twr(mock_objets, exchange_rate, client)
 
 
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_viewset_calculate_twr_errors(mock_objets, exchange_rate, client):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_viewset_calculate_twr_errors(mock_objects, exchange_rate, client):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values_list = mock_filter.return_value.values_list
     mock_values_list.return_value = None

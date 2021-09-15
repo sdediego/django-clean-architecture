@@ -29,8 +29,7 @@ class CurrencyController:
             currency = self.currency_interator.get(code.upper())
         except EntityDoesNotExist as err:
             currency = filter_currencies(
-                code.upper(),
-                self.provider_client_interactor.fetch_data('currency_get'))
+                code.upper(), self.provider_client_interactor.fetch_data('currency_get'))
             if currency is None:
                 return {'error': err.message}, HTTPStatus.NOT_FOUND.value
         return CurrencySerializer().dump(currency), HTTPStatus.OK.value
