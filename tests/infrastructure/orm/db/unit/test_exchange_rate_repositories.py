@@ -17,8 +17,8 @@ from tests.fixtures import currency, exchange_rate
 
 @pytest.mark.unit
 @patch.object(Currency, 'objects')
-def test_currency_db_repository_get(mock_objets, currency):
-    mock_filter = mock_objets.filter
+def test_currency_db_repository_get(mock_objects, currency):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -34,8 +34,8 @@ def test_currency_db_repository_get(mock_objets, currency):
 
 @pytest.mark.unit
 @patch.object(Currency, 'objects')
-def test_currency_db_repository_get_entity_does_not_exist(mock_objets, currency):
-    mock_filter = mock_objets.filter
+def test_currency_db_repository_get_entity_does_not_exist(mock_objects, currency):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -48,9 +48,9 @@ def test_currency_db_repository_get_entity_does_not_exist(mock_objets, currency)
 
 @pytest.mark.unit
 @patch.object(Currency, 'objects')
-def test_currency_db_repository_get_availables(mock_objets, currency):
+def test_currency_db_repository_get_availables(mock_objects, currency):
     num_of_currencies = random.randint(1, 10)
-    mock_values = mock_objets.values
+    mock_values = mock_objects.values
     mock_values.return_value = [vars(currency) for _ in range(num_of_currencies)]
     result = CurrencyDatabaseRepository().get_availables()
     assert isinstance(result, list)
@@ -59,8 +59,8 @@ def test_currency_db_repository_get_availables(mock_objets, currency):
 
 @pytest.mark.unit
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_db_repository_get(mock_objets, exchange_rate):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_db_repository_get(mock_objects, exchange_rate):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -82,8 +82,8 @@ def test_exchange_rate_db_repository_get(mock_objets, exchange_rate):
 
 @pytest.mark.unit
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_db_repository_get_entity_does_not_exist(mock_objets, exchange_rate):
-    mock_filter = mock_objets.filter
+def test_exchange_rate_db_repository_get_entity_does_not_exist(mock_objects, exchange_rate):
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = Mock()
@@ -104,9 +104,9 @@ def test_exchange_rate_db_repository_get_entity_does_not_exist(mock_objets, exch
 
 @pytest.mark.unit
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_db_repository_get_rate_series(mock_objets, exchange_rate):
+def test_exchange_rate_db_repository_get_rate_series(mock_objects, exchange_rate):
     num_of_rates = random.randint(1, 10)
-    mock_filter = mock_objets.filter
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values_list = mock_filter.return_value.values_list
     mock_values_list.return_value = [
@@ -123,9 +123,9 @@ def test_exchange_rate_db_repository_get_rate_series(mock_objets, exchange_rate)
 
 @pytest.mark.unit
 @patch.object(CurrencyExchangeRate, 'objects')
-def test_exchange_rate_db_repository_get_time_series(mock_objets, exchange_rate):
+def test_exchange_rate_db_repository_get_time_series(mock_objects, exchange_rate):
     num_of_rates = random.randint(1, 10)
-    mock_filter = mock_objets.filter
+    mock_filter = mock_objects.filter
     mock_filter.return_value = Mock()
     mock_values = mock_filter.return_value.values
     mock_values.return_value = [vars(exchange_rate) for _ in range(num_of_rates)]
