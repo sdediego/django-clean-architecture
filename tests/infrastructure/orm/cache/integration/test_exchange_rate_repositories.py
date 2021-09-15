@@ -28,7 +28,7 @@ def test_currency_cache_repository_get_availables(currency):
     cache.set(CACHE_AVAILABLE_CURRENCIES_KEY, currencies)
     result = CurrencyCacheRepository().get_availables()
     assert isinstance(result, list)
-    assert len(currencies) == num_of_currencies
+    assert len(result) == num_of_currencies
     assert all([isinstance(currency, CurrencyEntity) for currency in result])
 
 
@@ -48,7 +48,7 @@ def test_currency_cache_repository_save_availables(currency):
     CurrencyCacheRepository().save_availables(currencies)
     result = cache.get(CACHE_AVAILABLE_CURRENCIES_KEY)
     assert isinstance(result, list)
-    assert len(currencies) == num_of_currencies
+    assert len(result) == num_of_currencies
     assert all([isinstance(currency, CurrencyEntity) for currency in result])
 
 
