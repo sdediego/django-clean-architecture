@@ -10,7 +10,7 @@ from src.infrastructure.orm.db.exchange_rate.repositories import (
     CurrencyDatabaseRepository, CurrencyExchangeRateDatabaseRepository)
 from src.interface.repositories.exceptions import EntityDoesNotExist
 from tests.fixtures import currency, exchange_rate
-from tests.infrastructure.orm.db.integration.factories import (
+from tests.infrastructure.orm.db.factories.exchange_rate import (
     CurrencyFactory, CurrencyExchangeRateFactory)
 
 
