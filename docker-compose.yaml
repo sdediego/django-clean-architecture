@@ -6,6 +6,7 @@ services:
       context: .
     image: forex:develop
     container_name: forex_api
+    command: sh scripts/start_api.sh
     restart: on-failure
     volumes:
       - .:/code
@@ -48,6 +49,21 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+  worker:
+    build:
+      context: .
+    image: worker:develop
+    container_name: forex_worker
+    command: sh scripts/start_worker.sh
+    restart: on-failure
+    volumes:
+      - .:/code
+      - scripts:/code/scripts
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
 
 volumes:
   pgdata:

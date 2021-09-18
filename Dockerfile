@@ -35,13 +35,15 @@ RUN apt-get update && apt-get upgrade -y \
 WORKDIR $PROJECT_DIR
 
 # copy script as an entry point:
-COPY ./scripts/entrypoint.sh ${PROJECT_DIR}/scripts/
+COPY ./scripts ${PROJECT_DIR}/scripts/
 
 # copy dependencies only
 COPY ./pyproject.toml ./poetry.lock ${PROJECT_DIR}/
 
 # setting up proper permissions
 RUN chmod +x ${PROJECT_DIR}/scripts/entrypoint.sh \
+    && chmod +x ${PROJECT_DIR}/scripts/start_api.sh \
+    && chmod +x ${PROJECT_DIR}/scripts/start_worker.sh \
     && groupadd -r api && useradd -d /code -r -g api api \
     && chown api:api -R /code \
     # install dependencies
