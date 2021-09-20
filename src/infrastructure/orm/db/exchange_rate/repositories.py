@@ -1,12 +1,15 @@
 # coding: utf-8
 
+import dataclasses
+import json
 from typing import List
-
-from django.db.models import Q
 
 from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 from src.infrastructure.orm.db.exchange_rate.models import (
     Currency, CurrencyExchangeRate)
+from src.infrastructure.orm.db.exchange_rate.tasks import (
+    bulk_save_currencies, bulk_save_exchange_rates, save_currency,
+    save_exchange_rate)
 from src.interface.repositories.exceptions import EntityDoesNotExist
 
 
@@ -20,6 +23,14 @@ class CurrencyDatabaseRepository:
 
     def get_availables(self) -> List[CurrencyEntity]:
         return list(map(lambda x: CurrencyEntity(**x), Currency.objects.values()))
+
+    def save(self, currency: CurrencyEntity):
+        currency_json = json.dumps(dataclasses.asdict(currency))
+        save_currency.apply_async(kwargs={'currency_json': currency_json})
+
+    def bulk_save(self, currencies: List[CurrencyEntity]):
+        currencies_json = json.dumps(list(map(dataclasses.asdict, currencies)))
+        bulk_save_currencies.apply_async(kwargs={'currencies_json': currencies_json})
 
 
 class CurrencyExchangeRateDatabaseRepository:
@@ -50,10 +61,21 @@ class CurrencyExchangeRateDatabaseRepository:
 
     def get_time_series(self, source_currency: str, exchanged_currency: str,
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
-        time_series = CurrencyExchangeRate.objects.filter(
+        timeseries = CurrencyExchangeRate.objects.filter(
             source_currency=source_currency,
             exchanged_currency__in=exchanged_currency.split(','),
             valuation_date__range=[date_from, date_to]
         ).values(
             'source_currency', 'exchanged_currency', 'valuation_date', 'rate_value')
-        return list(map(lambda x: CurrencyExchangeRateEntity(**x), time_series))
+        return list(map(lambda x: CurrencyExchangeRateEntity(**x), timeseries))
+
+    def save(self, exchange_rate: CurrencyExchangeRateEntity):
+        exchange_rate_json = json.dumps(dataclasses.asdict(exchange_rate))
+        save_exchange_rate.apply_async(
+            kwargs={'exchange_rate_json': exchange_rate_json})
+
+    def bulk_save(self, exchange_rates: List[CurrencyExchangeRateEntity]):
+        exchange_rates_json = json.dumps(
+            list(map(dataclasses.asdict, exchange_rates)))
+        bulk_save_exchange_rates.apply_async(
+            kwargs={'exchange_rates_json': exchange_rates_json})
