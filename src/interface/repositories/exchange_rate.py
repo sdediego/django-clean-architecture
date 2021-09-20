@@ -25,6 +25,12 @@ class CurrencyRepository:
             self.cache_repo.save_availables(currencies)
         return currencies
 
+    def save(self, currency: CurrencyEntity):
+        self.db_repo.save(currency)
+
+    def bulk_save(self, currencies: List[CurrencyEntity]):
+        self.db_repo.bulk_save(currencies)
+
 
 class CurrencyExchangeRateRepository:
 
@@ -51,3 +57,9 @@ class CurrencyExchangeRateRepository:
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         return self.db_repo.get_time_series(
             source_currency, exchanged_currency, date_from, date_to)
+
+    def save(self, exchange_rate: CurrencyExchangeRateEntity):
+        self.db_repo.save(exchange_rate)
+
+    def bulk_save(self, exchange_rates: List[CurrencyExchangeRateEntity]):
+        self.db_repo.bulk_save(exchange_rates)
