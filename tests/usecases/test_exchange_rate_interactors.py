@@ -3,6 +3,7 @@
 import datetime
 import random
 from unittest.mock import Mock
+from django.db import reset_queries
 
 import pytest
 
@@ -36,6 +37,27 @@ def test_currency_interactor_get_availables(currency):
     assert isinstance(result, list)
     assert len(result) == num_of_currencies
     assert all([isinstance(currency, CurrencyEntity) for currency in result])
+
+
+@pytest.mark.unit
+def test_currency_interactor_save(currency):
+    currency_repo = Mock()
+    currency_repo.save.return_value = None
+    currency_interactor = CurrencyInteractor(currency_repo)
+    result = currency_interactor.save(currency)
+    assert currency_repo.save.called
+    assert result is None
+
+
+@pytest.mark.unit
+def test_currency_interactor_bulk_save(currency):
+    currencies = [currency for _ in range(random.randint(1, 10))]
+    currency_repo = Mock()
+    currency_repo.bulk_save.return_value = None
+    currency_interactor = CurrencyInteractor(currency_repo)
+    result = currency_interactor.bulk_save(currencies)
+    assert currency_repo.bulk_save.called
+    assert result is None
 
 
 @pytest.mark.unit
@@ -115,3 +137,24 @@ def test_currency_exchange_rate_interactor_get_time_series(exchange_rate):
     assert isinstance(result, list)
     assert len(result) == series_length
     assert all([isinstance(cer, CurrencyExchangeRateEntity) for cer in result])
+
+
+@pytest.mark.unit
+def test_currency_exchange_rate_interactor_save(exchange_rate):
+    exchange_rate_repo = Mock()
+    exchange_rate_repo.save.return_value = None
+    exchange_rate_interactor = CurrencyExchangeRateInteractor(exchange_rate_repo)
+    result = exchange_rate_interactor.save(exchange_rate)
+    assert exchange_rate_repo.save.called
+    assert result is None
+
+
+@pytest.mark.unit
+def test_currency_exchange_rate_interactor_bulk_save(exchange_rate):
+    exchange_rates = [exchange_rate for _ in range(random.randint(1, 10))]
+    exchange_rate_repo = Mock()
+    exchange_rate_repo.bulk_save.return_value = None
+    exchange_rate_interactor = CurrencyExchangeRateInteractor(exchange_rate_repo)
+    result = exchange_rate_interactor.bulk_save(exchange_rates)
+    assert exchange_rate_repo.bulk_save.called
+    assert result is None
