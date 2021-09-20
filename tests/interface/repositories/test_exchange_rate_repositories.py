@@ -89,6 +89,29 @@ def test_currency_repository_cache_get_availables(currency):
 
 
 @pytest.mark.unit
+def test_currency_repository_database_save(currency):
+    db_repo = Mock()
+    db_repo.save.return_value = None
+    cache_repo = Mock()
+    currency_repo = CurrencyRepository(db_repo, cache_repo)
+    result = currency_repo.save(currency)
+    assert db_repo.save.called
+    assert result is None
+
+
+@pytest.mark.unit
+def test_currency_interactor_bulk_save(currency):
+    currencies = [currency for _ in range(random.randint(1, 10))]
+    db_repo = Mock()
+    db_repo.bulk_save.return_value = None
+    cache_repo = Mock()
+    currency_repo = CurrencyRepository(db_repo, cache_repo)
+    result = currency_repo.bulk_save(currencies)
+    assert db_repo.bulk_save.called
+    assert result is None
+
+
+@pytest.mark.unit
 def test_currency_exchange_rate_repository_database_get(exchange_rate):
     db_repo = Mock()
     db_repo.get.return_value = exchange_rate
@@ -178,3 +201,26 @@ def test_currency_exchange_rate_repository_get_time_series(exchange_rate):
     assert isinstance(result, list)
     assert len(result) == series_length
     assert all([isinstance(cer, CurrencyExchangeRateEntity) for cer in result])
+
+
+@pytest.mark.unit
+def test_currency_exchange_rate_repository_save(exchange_rate):
+    db_repo = Mock()
+    db_repo.save.return_value = None
+    cache_repo = Mock()
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
+    result = exchange_rate_repo.save(exchange_rate)
+    assert db_repo.save.called
+    assert result is None
+
+
+@pytest.mark.unit
+def test_currency_exchange_rate_repository_bulk_save(exchange_rate):
+    exchange_rates = [exchange_rate for _ in range(random.randint(1, 10))]
+    db_repo = Mock()
+    db_repo.bulk_save.return_value = None
+    cache_repo = Mock()
+    exchange_rate_repo = CurrencyExchangeRateRepository(db_repo, cache_repo)
+    result = exchange_rate_repo.bulk_save(exchange_rates)
+    assert db_repo.bulk_save.called
+    assert result is None
