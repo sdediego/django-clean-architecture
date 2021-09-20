@@ -50,11 +50,18 @@ def test_provider_setting_entity_post_init(provider_setting):
 
 
 @pytest.mark.unit
-def test_provider_setting_entity_encode_and_decode_secret():
-    secret = 'secret'
-    encoded = ProviderSettingEntity.encode_secret(secret)
-    assert isinstance(encoded, str)
-    assert ProviderSettingEntity.decode_secret(encoded) == secret
+def test_provider_setting_entity_encode_and_decode_secret(provider):
+    secret_value = 'secret_value'
+    encoded_secret_value = ProviderSettingEntity.encode_secret(secret_value)
+    provider_setting = ProviderSettingEntity(
+        provider=provider,
+        setting_type=SECRET_SETTING_TYPE,
+        key='secret_key',
+        value=encoded_secret_value
+    )
+
+    assert isinstance(provider_setting.value, str)
+    assert provider_setting.value == secret_value
 
 
 @pytest.mark.unit
