@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='Currency',
             fields=[
                 ('code', models.CharField(max_length=3, primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(db_index=True, max_length=25)),
-                ('symbol', models.CharField(blank=True, max_length=1, null=True)),
+                ('name', models.CharField(max_length=50, blank=True, null=True)),
+                ('symbol', models.CharField(max_length=1, blank=True, null=True)),
             ],
             options={
                 'verbose_name': 'currency',

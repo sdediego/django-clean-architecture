@@ -32,6 +32,7 @@ class CurrencyController:
                 code.upper(), self.provider_client_interactor.fetch_data('currency_get'))
             if currency is None:
                 return {'error': err.message}, HTTPStatus.NOT_FOUND.value
+            self.currency_interator.save(currency)
         return CurrencySerializer().dump(currency), HTTPStatus.OK.value
 
     def list(self) -> Tuple[list, int]:
@@ -40,6 +41,8 @@ class CurrencyController:
             currencies = self.provider_client_interactor.fetch_data('currency_list')
             if 'error' in currencies:
                 currencies = []
+            else:
+                self.currency_interator.bulk_save(currencies)
         return (
             CurrencySerializer(many=True).dump(currencies),
             HTTPStatus.OK.value
@@ -65,6 +68,7 @@ class CurrencyExchangeRateController:
                 'exchange_rate_convert', **data)
             if not isinstance(exchange_rate, CurrencyExchangeRateEntity):
                 return {'error': err.message}, HTTPStatus.NOT_FOUND.value
+            self.exchange_rate_interactor.save(exchange_rate)
         exchanged_amount = CurrencyExchangeAmountEntity(
             exchanged_currency=data.get('exchanged_currency'),
             exchanged_amount=exchange_rate.calculate_amount(amount),
@@ -85,6 +89,8 @@ class CurrencyExchangeRateController:
                 'exchange_rate_list', **data)
             if 'error' in timeseries:
                 timeseries = []
+            else:
+                self.exchange_rate_interactor.bulk_save(timeseries)
         return (
             CurrencyExchangeRateSerializer(many=True).dump(timeseries),
             HTTPStatus.OK.value
@@ -100,6 +106,7 @@ class CurrencyExchangeRateController:
                 'exchange_rate_calculate_twr', **data)
             if 'error' in timeseries:
                 return {'error': timeseries['error']}, timeseries['status_code']
+            self.exchange_rate_interactor.bulk_save(timeseries)
             rate_series = get_rate_series(timeseries)
         time_weighted_rate = TimeWeightedRateEntity(
             time_weighted_rate=calculate_time_weighted_rate(rate_series)

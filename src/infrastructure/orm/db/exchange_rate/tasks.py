@@ -9,11 +9,13 @@ from src.infrastructure.orm.db.exchange_rate.models import (
 
 
 def get_currency(code: str, name: str = None) -> Currency:
+    attrs = {'code': code}
     try:
-        currency = Currency.objects.get(code=code)
+        currency = Currency.objects.get(**attrs)
     except Currency.DoesNotExist:
-        name = name or code
-        currency = Currency.objects.create(code=code, name=name)
+        if name is not None:
+            attrs.update({'name': name})
+        currency = Currency.objects.create(**attrs)
     return currency
 
 
