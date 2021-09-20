@@ -38,7 +38,7 @@ class ProviderSettingEntity:
         elif self.setting_type == FLOAT_SETTING_TYPE:
             self.value = float(self.value)
         elif self.setting_type == SECRET_SETTING_TYPE:
-            self.value = self.decode_secret(self.value)
+            self.value = self.decode_secret()
         elif self.setting_type in (TEXT_SETTING_TYPE, URL_SETTING_TYPE):
             self.value = str(self.value)
 
@@ -49,10 +49,8 @@ class ProviderSettingEntity:
             value = '*' * 10
         return f'{setting.provider.name} - {setting.key}: {value}'
 
-    @staticmethod
-    def decode_secret(value: Any) -> str:
-        value = str(value)
-        return base64.decodebytes(value.encode()).decode()
+    def decode_secret(self) -> str:
+        return base64.decodebytes(self.value.encode()).decode()
 
     @staticmethod
     def encode_secret(value: Any) -> str:

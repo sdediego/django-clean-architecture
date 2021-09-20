@@ -17,6 +17,12 @@ class CurrencyInteractor:
     def get_availables(self) -> List[CurrencyEntity]:
         return self.currency_repo.get_availables()
 
+    def save(self, currency: CurrencyEntity):
+        self.currency_repo.save(currency)
+
+    def bulk_save(self, currencies: List[CurrencyEntity]):
+        self.currency_repo.bulk_save(currencies)
+
 
 class CurrencyExchangeRateInteractor:
 
@@ -42,3 +48,9 @@ class CurrencyExchangeRateInteractor:
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
         return self.exchange_rate_repo.get_time_series(
             source_currency, exchanged_currency, date_from, date_to)
+
+    def save(self, exchange_rate: CurrencyExchangeRateEntity):
+        self.exchange_rate_repo.save(exchange_rate)
+
+    def bulk_save(self, exchange_rates: List[CurrencyExchangeRateEntity]):
+        self.exchange_rate_repo.bulk_save(exchange_rates)
