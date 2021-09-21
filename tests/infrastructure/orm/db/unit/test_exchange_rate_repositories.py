@@ -11,6 +11,8 @@ from src.infrastructure.orm.db.exchange_rate.models import (
     Currency, CurrencyExchangeRate)
 from src.infrastructure.orm.db.exchange_rate.repositories import (
     CurrencyDatabaseRepository, CurrencyExchangeRateDatabaseRepository)
+from src.infrastructure.orm.db.exchange_rate.tasks import (
+    bulk_save_currencies, bulk_save_exchange_rates, save_currency, save_exchange_rate)
 from src.interface.repositories.exceptions import EntityDoesNotExist
 from tests.fixtures import currency, exchange_rate
 
@@ -55,6 +57,25 @@ def test_currency_db_repository_get_availables(mock_objects, currency):
     result = CurrencyDatabaseRepository().get_availables()
     assert isinstance(result, list)
     assert all([isinstance(currency, CurrencyEntity) for currency in result])
+
+
+@pytest.mark.unit
+@patch.object(save_currency, 'apply_async')
+def test_currency_db_repository_save(mock_apply_async, currency):
+    mock_apply_async.return_value = None
+    result = CurrencyDatabaseRepository().save(currency)
+    assert result is None
+    assert mock_apply_async.called
+
+
+@pytest.mark.unit
+@patch.object(bulk_save_currencies, 'apply_async')
+def test_currency_db_repository_bulk_save(mock_apply_async, currency):
+    currencies = [currency for _ in range(random.randint(1, 10))]
+    mock_apply_async.return_value = None
+    result = CurrencyDatabaseRepository().bulk_save(currencies)
+    assert result is None
+    assert mock_apply_async.called
 
 
 @pytest.mark.unit
@@ -138,3 +159,22 @@ def test_exchange_rate_db_repository_get_time_series(mock_objects, exchange_rate
     assert isinstance(result, list)
     assert all([isinstance(exchange_rate, CurrencyExchangeRateEntity)
                 for exchange_rate in result])
+
+
+@pytest.mark.unit
+@patch.object(save_exchange_rate, 'apply_async')
+def test_exchange_rate_db_repository_save(mock_apply_async, exchange_rate):
+    mock_apply_async.return_value = None
+    result = CurrencyExchangeRateDatabaseRepository().save(exchange_rate)
+    assert result is None
+    assert mock_apply_async.called
+
+
+@pytest.mark.unit
+@patch.object(bulk_save_exchange_rates, 'apply_async')
+def test_exchange_rate_db_repository_bulk_save(mock_apply_async, exchange_rate):
+    exchange_rates = [exchange_rate for _ in range(random.randint(1, 10))]
+    mock_apply_async.return_value = None
+    result = CurrencyExchangeRateDatabaseRepository().bulk_save(exchange_rates)
+    assert result is None
+    assert mock_apply_async.called
