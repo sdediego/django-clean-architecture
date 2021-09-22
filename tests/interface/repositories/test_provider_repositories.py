@@ -25,7 +25,7 @@ def test_provider_repository_database_get_by_priority(provider):
     assert isinstance(result, list)
     assert isinstance(result_first, ProviderEntity)
     assert result_first.name == provider.name
-    assert result_first.slug == provider.slug
+    assert result_first.driver == provider.driver
     assert result_first.priority == provider.priority
     assert result_first.enabled == provider.enabled
     assert ProviderEntity.to_string(
