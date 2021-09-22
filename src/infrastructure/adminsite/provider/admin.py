@@ -16,5 +16,5 @@ class ProviderSettingInline(admin.TabularInline):
 class ProviderAdmin(admin.ModelAdmin):
     model = Provider
     inlines = [ProviderSettingInline]
-    list_display = ('name', 'slug', 'priority', 'enabled')
+    list_display = ('name', 'driver', 'priority', 'enabled')
     ordering = ('priority',)

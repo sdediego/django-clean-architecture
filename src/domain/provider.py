@@ -12,14 +12,14 @@ from src.domain.constants import (
 @dataclass
 class ProviderEntity:
     name: str = None
-    slug: str = None
+    driver: str = None
     priority: int = None
     enabled: bool = None
     settings: dict = field(default_factory=dict)
 
     @staticmethod
     def to_string(provider: 'ProviderEntity') -> str:
-        return f'{provider.name} ({provider.slug}): Priority {provider.priority}'
+        return f'{provider.name} ({provider.driver}): Priority {provider.priority}'
 
 
 @dataclass

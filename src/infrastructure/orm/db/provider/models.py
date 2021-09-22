@@ -8,7 +8,7 @@ from src.infrastructure.orm.db.provider.constants import SETTING_TYPE_CHOICES
 
 class Provider(models.Model):
     name = models.CharField(max_length=25, blank=False, null=False, unique=True)
-    slug = models.SlugField(max_length=25, blank=False, null=False, unique=True)
+    driver = models.CharField(max_length=25, blank=False, null=False, unique=True)
     priority = models.PositiveSmallIntegerField(blank=False, null=False, unique=True)
     enabled = models.BooleanField(default=True)
 

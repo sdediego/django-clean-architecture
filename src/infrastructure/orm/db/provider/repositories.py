@@ -16,7 +16,7 @@ class ProviderDatabaseRepository:
         return [
             ProviderEntity(
                 name=provider.name,
-                slug=provider.slug,
+                driver=provider.driver,
                 priority=provider.priority,
                 settings={
                     setting.get('key'): ProviderSettingEntity(**setting)
