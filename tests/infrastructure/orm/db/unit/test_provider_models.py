@@ -14,7 +14,7 @@ from tests.fixtures import provider, provider_setting
 def create_provider_model(provider):
     return Provider(
         name=provider.name,
-        slug=provider.slug,
+        driver=provider.driver,
         priority=provider.priority,
         enabled=provider.enabled
     )
@@ -35,7 +35,7 @@ def test_provider_attrs(provider):
     model = create_provider_model(provider)
     assert isinstance(model, Provider)
     assert isinstance(model.name, str)
-    assert isinstance(model.slug, str)
+    assert isinstance(model.driver, str)
     assert isinstance(model.priority, int)
     assert isinstance(model.enabled, bool)
 
