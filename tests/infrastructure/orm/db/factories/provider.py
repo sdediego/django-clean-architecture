@@ -10,6 +10,7 @@ from src.domain.constants import (
     BOOLEAN_SETTING_TYPE, FLOAT_SETTING_TYPE, INTEGER_SETTING_TYPE,
     SECRET_SETTING_TYPE, TEXT_SETTING_TYPE, URL_SETTING_TYPE)
 from src.domain.provider import ProviderSettingEntity
+from src.infrastructure.clients.provider.utils import get_drivers_names
 from src.infrastructure.orm.db.provider.models import (
     Provider, ProviderSetting)
 from tests.fixtures import generate_random_string
@@ -31,7 +32,7 @@ class ProviderFactory(django.DjangoModelFactory):
         model = Provider
 
     name = fuzzy.FuzzyText(length=15, chars=string.ascii_letters)
-    slug = fuzzy.FuzzyText(length=15, chars=string.ascii_lowercase)
+    driver = fuzzy.FuzzyChoice(choices=get_drivers_names())
     priority = fuzzy.FuzzyInteger(low=1, high=10)
     enabled = True
 
