@@ -1,7 +1,9 @@
 # coding: utf-8
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
+from src.infrastructure.clients.provider.utils import get_drivers_names
 from src.domain.provider import ProviderEntity, ProviderSettingEntity
 from src.infrastructure.orm.db.provider.constants import SETTING_TYPE_CHOICES
 
@@ -19,6 +21,15 @@ class Provider(models.Model):
 
     def __str__(self) -> str:
         return ProviderEntity.to_string(self)
+
+    def clean(self):
+        if self.driver not in get_drivers_names():
+            raise ValidationError({'driver': 'Invalid driver name'})
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class ProviderSetting(models.Model):

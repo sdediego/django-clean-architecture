@@ -2,9 +2,30 @@
 
 import datetime
 from datetime import datetime as dt
+from importlib import import_module
 
 import numpy as np
 import pandas as pd
+
+
+def get_available_drivers() -> dict:
+    try:
+        module = import_module('src.infrastructure.clients.provider')
+    except ImportError:
+        raise ImportError('Unable to import providers module')
+    drivers = {
+        name: item for name, item in module.__dict__.items() \
+            if name.endswith('Driver') and callable(item)
+    }
+    return drivers
+
+
+def get_drivers_names() -> tuple:
+    return tuple(get_available_drivers().keys())
+
+
+def get_drivers_choices() -> tuple:
+    return tuple(zip(*(get_drivers_names(),) * 2))
 
 
 def get_business_days(date_from: str, date_to: str) -> tuple:

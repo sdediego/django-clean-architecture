@@ -2,7 +2,8 @@
 
 from django.contrib import admin
 
-from src.infrastructure.adminsite.provider.forms import ProviderSettingForm
+from src.infrastructure.adminsite.provider.forms import (
+    ProviderForm, ProviderSettingForm)
 from src.infrastructure.orm.db.provider.models import (
     Provider, ProviderSetting)
 
@@ -15,6 +16,7 @@ class ProviderSettingInline(admin.TabularInline):
 
 class ProviderAdmin(admin.ModelAdmin):
     model = Provider
+    form = ProviderForm
     inlines = [ProviderSettingInline]
     list_display = ('name', 'driver', 'priority', 'enabled')
     ordering = ('priority',)

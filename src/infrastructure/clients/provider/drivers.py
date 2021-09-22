@@ -1,11 +1,11 @@
 # coding: utf-8
 
 from http import HTTPStatus
-from importlib import import_module
 from typing import Any, List
 
 from src.domain.provider import ProviderEntity
 from src.infrastructure.clients.provider.base import ProviderBaseDriver
+from src.infrastructure.clients.provider.utils import get_available_drivers
 from src.usecases.provider import ProviderInteractor
 
 
@@ -20,20 +20,20 @@ class ProviderMasterDriver:
 
     def __init__(self, provider_interactor: ProviderInteractor):
         self.provider_interactor = provider_interactor
+        self.drivers = get_available_drivers()
 
     @property
     def providers(self) -> List[ProviderEntity]:
         return self.provider_interactor.get_by_priority()
 
+    def _get_driver_class(self, provider: ProviderEntity) -> ProviderBaseDriver:
+        driver_name = provider.driver
+        return self.drivers.get(driver_name)
+
     def _get_driver_by_priority(self) -> ProviderBaseDriver:
         for provider in self.providers:
-            driver_name = provider.name
-            try:
-                module = import_module('src.infrastructure.clients.provider')
-            except ImportError:
-                raise ImportError(f'Unable to import driver {driver_name}')
-            driver = getattr(module, f'{driver_name}Driver')
-            yield driver(provider)
+            driver_class = self._get_driver_class(provider)
+            yield driver_class(provider)
 
     def fetch_data(self, action: str, **kwargs: dict) -> Any:
         error = 'Unable to fetch data from remote server'

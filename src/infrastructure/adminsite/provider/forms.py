@@ -1,13 +1,21 @@
 # coding: utf-8
 
-import base64
-
+from django import forms
 from django.core.validators import URLValidator
 from django.forms import ModelForm, ValidationError
 
 from src.domain.constants import SECRET_SETTING_TYPE
 from src.domain.provider import ProviderSettingEntity
-from src.infrastructure.orm.db.provider.models import ProviderSetting
+from src.infrastructure.clients.provider.utils import get_drivers_choices
+from src.infrastructure.orm.db.provider.models import Provider, ProviderSetting
+
+
+class ProviderForm(ModelForm):
+    driver = forms.ChoiceField(choices=get_drivers_choices(), required=True)
+
+    class Meta:
+        model = Provider
+        fields = ('name', 'driver', 'priority', 'enabled')
 
 
 class ProviderSettingForm(ModelForm):
