@@ -10,7 +10,7 @@ export PORT
 # Run database migrations
 python manage.py migrate
 
-if [ ${DJANGO_ENV} != 'production' ]; then
+if [ ${DJANGO_ENV} = 'develop' ]; then
     # Create superuser if not exists
     export DJANGO_SUPERUSER_USERNAME="admin"
     export DJANGO_SUPERUSER_PASSWORD="admin"

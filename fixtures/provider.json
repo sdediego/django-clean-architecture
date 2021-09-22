@@ -51,7 +51,7 @@
       "provider": 1,
       "setting_type": "secret",
       "key": "access_key",
-      "value": "ZmJMzZMGQ1MlhMDU5ODM2TlhYjVhYjc0NZThkjgwNzk=\n",
+      "value": "",
       "description": "A unique key assigned to each Fixer API account used to authenticate with the API."
     }
   }, {
@@ -71,7 +71,7 @@
       "provider": 2,
       "setting_type": "secret",
       "key": "api_key",
-      "value": "aGl1TDRMGdaMzEclFOcUt4Znc4RWlHVnZEaTS2k0UmU=\n",
+      "value": "",
       "description": "The API key to allow access to the API."
     }
   }, {
@@ -91,7 +91,7 @@
       "provider": 3,
       "setting_type": "secret",
       "key": "api_key",
-      "value": "YzkGE3zZNzMTE5Zjk4NZjJlDk3k2OWY0\n",
+      "value": "",
       "description": "The API key to get access to the API."
     }
   }]
