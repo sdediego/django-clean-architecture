@@ -12,7 +12,7 @@ from tests.fixtures import provider, provider_setting
 @pytest.mark.unit
 def test_provider_entity_attrs(provider):
     assert isinstance(provider.name, str)
-    assert isinstance(provider.slug, str)
+    assert isinstance(provider.driver, str)
     assert isinstance(provider.priority, int)
     assert isinstance(provider.enabled, bool)
     assert isinstance(provider.settings, dict)
@@ -23,7 +23,7 @@ def test_provider_entity_representation(provider):
     entity_str = ProviderEntity.to_string(provider)
     assert isinstance(entity_str, str)
     assert provider.name in entity_str
-    assert provider.slug in entity_str
+    assert provider.driver in entity_str
     assert str(provider.priority) in entity_str
 
 

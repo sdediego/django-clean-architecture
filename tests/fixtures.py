@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import base64
 import datetime
 import random
 import string
@@ -14,6 +13,7 @@ from src.domain.constants import (
     BOOLEAN_SETTING_TYPE, FLOAT_SETTING_TYPE, INTEGER_SETTING_TYPE,
     SECRET_SETTING_TYPE, TEXT_SETTING_TYPE, URL_SETTING_TYPE)
 from src.domain.provider import ProviderEntity, ProviderSettingEntity
+from src.infrastructure.clients.provider.utils import get_drivers_names
 
 
 def generate_random_string(size: int) -> str:
@@ -72,7 +72,7 @@ def provider() -> ProviderEntity:
     name = generate_random_string(10)
     return ProviderEntity(
         name=name,
-        slug=name.lower(),
+        driver=random.choice(get_drivers_names()),
         priority=random.randint(1, 9),
         enabled=random.choice([True, False]),
         settings=dict()
