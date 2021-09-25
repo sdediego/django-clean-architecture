@@ -1,9 +1,12 @@
 # coding: utf-8
 
 from datetime import date
+from typing import List
 
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow.decorators import post_load, pre_load
+
+from src.domain.exchange_rate import CurrencyExchangeRateEntity
 
 
 class ExchangeRateSerializer(Schema):
@@ -24,16 +27,17 @@ class ExchangeRateSerializer(Schema):
         return in_data
 
     @post_load(pass_original=True)
-    def process_rates(self, data: dict, original_data: dict, **kwargs) -> list:
+    def make_exchange_rates(self, data: dict, original_data: dict,
+                            **kwargs) -> List[CurrencyExchangeRateEntity]:
         exchanged_currencies = original_data.get('symbols').split(',')
         return [
-            {
-                'source_currency': data.get('source_currency'),
-                'exchanged_currency': exchanged_currency,
-                'valuation_date': data.get('valuation_date'),
-                'rate_value': round(
+            CurrencyExchangeRateEntity(
+                source_currency=data.get('source_currency'),
+                exchanged_currency=exchanged_currency,
+                valuation_date=data.get('valuation_date'),
+                rate_value=round(
                     float(data.get('rates').get(exchanged_currency)), 6)
-            }
+            )
             for exchanged_currency in exchanged_currencies
             if data.get('rates').get(exchanged_currency) is not None
         ]
