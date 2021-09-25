@@ -65,7 +65,7 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
     def get_currencies(self) -> List[CurrencyEntity]:
         response = self._request(self.CURRENCIES)
         currencies = self._deserialize_response(self.CURRENCIES, response)
-        return [CurrencyEntity(**currency) for currency in currencies]
+        return currencies
 
     def get_exchange_rate(self, source_currency: str, exchanged_currency: str,
                           date: str = None) -> CurrencyExchangeRateEntity:
@@ -79,9 +79,8 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
         }
         response = self._request(self.HISTORICAL_RATE, url_params=url_params)
         response.update({'symbols': exchanged_currency})
-        loaded_reponse = self._deserialize_response(self.HISTORICAL_RATE, response)
-        exchange_rate = loaded_reponse[0] if len(loaded_reponse) > 0 else None
-        return CurrencyExchangeRateEntity(**exchange_rate) if exchange_rate else None
+        exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)
+        return exchange_rate[0] if len(exchange_rate) > 0 else None
 
     @async_event_loop
     async def get_time_series(self, source_currency: str, exchanged_currency: str,
@@ -105,6 +104,4 @@ class ExchangeRateAPIDriver(ProviderBaseDriver):
             map(request, repeat(self.HISTORICAL_RATE), repeat(params), url_params)))
         timeseries = list(chain(*map(
             self._deserialize_response, repeat(self.HISTORICAL_RATE), responses)))
-        return [
-            CurrencyExchangeRateEntity(**exchange_rate) for exchange_rate in timeseries
-        ]
+        return timeseries
