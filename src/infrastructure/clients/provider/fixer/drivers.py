@@ -71,7 +71,7 @@ class FixerDriver(ProviderBaseDriver):
     def get_currencies(self) -> List[CurrencyEntity]:
         response = self._request(self.CURRENCIES)
         currencies = self._deserialize_response(self.CURRENCIES, response)
-        return [CurrencyEntity(**currency) for currency in currencies]
+        return currencies
 
     def get_exchange_rate(self, source_currency: str, exchanged_currency: str,
                           date: str = None) -> CurrencyExchangeRateEntity:
@@ -79,7 +79,7 @@ class FixerDriver(ProviderBaseDriver):
         params = {'base': source_currency, 'symbols': exchanged_currency}
         response = self._request(self.HISTORICAL_RATE, params=params, url_params=url_params)
         exchange_rate = self._deserialize_response(self.HISTORICAL_RATE, response)
-        return CurrencyExchangeRateEntity(**exchange_rate)
+        return exchange_rate
 
     def get_time_series(self, source_currency: str, exchanged_currency: str,
                         date_from: str, date_to: str) -> List[CurrencyExchangeRateEntity]:
@@ -91,6 +91,4 @@ class FixerDriver(ProviderBaseDriver):
         }
         response = self._request(self.TIME_SERIES, params=params)
         timeseries = self._deserialize_response(self.TIME_SERIES, response)
-        return [
-            CurrencyExchangeRateEntity(**exchange_rate) for exchange_rate in timeseries
-        ]
+        return timeseries

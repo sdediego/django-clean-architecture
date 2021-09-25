@@ -1,7 +1,11 @@
 # coding: utf-8
 
+from typing import List
+
 from marshmallow import Schema, fields, EXCLUDE
 from marshmallow.decorators import post_load, pre_load
+
+from src.domain.exchange_rate import CurrencyEntity, CurrencyExchangeRateEntity
 
 
 class CurrencySerializer(Schema):
@@ -13,9 +17,10 @@ class CurrencySerializer(Schema):
         data_key='symbols', keys=fields.String(), values=fields.String(), required=True)
 
     @post_load
-    def make_currencies(self, data: dict, **kwargs) -> dict:
+    def make_currencies(self, data: dict, **kwargs) -> List[CurrencyEntity]:
         return [
-            {'code': code, 'name': name} for code, name in data['currencies'].items()
+            CurrencyEntity(code=code, name=name)
+            for code, name in data.get('currencies').items()
         ]
 
 
@@ -37,6 +42,10 @@ class ExchangeRateSerializer(Schema):
         in_data['rate_value'] = round(float(rate_value), 6)
         return in_data
 
+    @post_load
+    def make_exchange_rate(self, data: dict, **kwargs) -> CurrencyExchangeRateEntity:
+        return CurrencyExchangeRateEntity(**data)
+
 
 class TimeSeriesSerializer(Schema):
 
@@ -50,16 +59,16 @@ class TimeSeriesSerializer(Schema):
         required=True)
 
     @post_load
-    def make_exchange_rates(self, data: dict, **kwargs) -> list:
+    def make_exchange_rates(self, data: dict, **kwargs) -> List[CurrencyExchangeRateEntity]:
         source_currency = data.get('source_currency')
         rates = data.get('rates')
         return [
-            {
-                'source_currency': source_currency,
-                'exchanged_currency': exchanged_currency,
-                'valuation_date': date,
-                'rate_value': round(float(rate_value), 6)
-            }
+            CurrencyExchangeRateEntity(
+                source_currency=source_currency,
+                exchanged_currency=exchanged_currency,
+                valuation_date=date,
+                rate_value=round(float(rate_value), 6)
+            )
             for date, exchange_rates in rates.items()
             for exchanged_currency, rate_value in exchange_rates.items()
         ]
