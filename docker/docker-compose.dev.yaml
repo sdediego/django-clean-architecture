@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    image: forex:development
+    restart: on-failure
+    command: sh scripts/start_api.sh
+    environment:
+      - DJANGO_ENV=development
+      - DJANGO_PORT=8000
+    volumes:
+      - ../scripts:/code/scripts
+      - ../src:/code/src
+      - ../tests:/code/tests
+  cache:
+    restart: on-failure
+    environment:
+      - REDIS_PORT=6379
+  db:
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=forex
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+  worker:
+    image: worker:development
+    restart: on-failure
+    command: sh scripts/start_worker.sh
+    environment:
+      - DJANGO_ENV=development
+    volumes:
+      - ../scripts:/code/scripts
+      - ../src:/code/src
+      - ../tests:/code/tests

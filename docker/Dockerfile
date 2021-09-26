@@ -1,11 +1,9 @@
 FROM python:3.8-slim
 
 # environment variables
-ARG DJANGO_ENV=develop \
-    PORT=8000
+ARG DJANGO_ENV
 
 ENV DJANGO_ENV=$DJANGO_ENV \
-    PORT=$PORT \
     PROJECT_DIR="/code" \
     # python
     PYTHONFAULTHANDLER=1 \
@@ -48,7 +46,7 @@ RUN chmod +x ${PROJECT_DIR}/scripts/entrypoint.sh \
     && chown api:api -R /code \
     # install dependencies
     && poetry config virtualenvs.create false \
-    && poetry install $(test $DJANGO_ENV = production && echo "--no-dev") --no-interaction --no-ansi
+    && poetry install $(test "$DJANGO_ENV" = production && echo "--no-dev") --no-interaction --no-ansi
 
 # expose port
 EXPOSE $PORT

@@ -3,16 +3,11 @@ version: '3.8'
 services:
   api:
     build:
-      context: .
-    image: forex:develop
+      context: ./..
+      dockerfile: ./docker/Dockerfile
     container_name: forex_api
-    command: sh scripts/start_api.sh
-    restart: on-failure
-    volumes:
-      - .:/code
-      - scripts:/code/scripts
     ports:
-      - 8000:8000
+      - ${DJANGO_PORT:-8000}:${DJANGO_PORT:-8000}
     depends_on:
       db:
         condition: service_healthy
@@ -21,11 +16,10 @@ services:
   cache:
     image: redis:6.2
     container_name: forex_cache
-    restart: on-failure
     volumes:
       - redisdata:/var/lib/redis/data
     ports:
-      - 6379:6379
+      - ${REDIS_PORT:-6379}:${REDIS_PORT:-6379}
     healthcheck:
       test: redis-cli ping
       interval: 10s
@@ -34,16 +28,10 @@ services:
   db:
     image: postgres:12.7
     container_name: forex_db
-    restart: on-failure
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_DB=forex
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_PORT=5432
+      - ${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}
     healthcheck:
       test: pg_isready -q -d forex -U postgres
       interval: 10s
@@ -51,14 +39,9 @@ services:
       retries: 5
   worker:
     build:
-      context: .
-    image: worker:develop
+      context: ./..
+      dockerfile: ./docker/Dockerfile
     container_name: forex_worker
-    command: sh scripts/start_worker.sh
-    restart: on-failure
-    volumes:
-      - .:/code
-      - scripts:/code/scripts
     depends_on:
       db:
         condition: service_healthy
@@ -72,6 +55,3 @@ volumes:
   redisdata:
     driver: local
     name: redisdata
-  scripts:
-    driver: local
-    name: scripts
