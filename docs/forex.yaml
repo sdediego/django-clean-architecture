@@ -1,0 +1,223 @@
+swagger: "2.0"
+info:
+  description: "Forex API backend server. Includes calls to retrieve currencies, exchange rates, currency convertion and time weighted rates"
+  version: "1.0.0"
+  title: "Forex API backend server"
+  contact:
+    email: "sergiodediego@outlook.com"
+  license:
+    name: "MIT License"
+    url: "https://choosealicense.com/licenses/mit/"
+host: "localhost:8000"
+basePath: "/api/exchange-rates"
+tags:
+- name: "currency"
+  description: "Currency detail and list of available currencies"
+- name: "exchange rate"
+  description: "Currency convertion, exchange rates and time weighted rates"
+schemes:
+- http
+paths:
+  /:
+    get:
+      tags:
+      - "exchange rate"
+      summary: "Currency exchange rates time series"
+      description: "Multiple comma separated exchanged currency codes can be provided"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "source_currency"
+        in: "query"
+        description: "Source currency code"
+        required: true
+        type: "string"
+      - name: "exchanged_currency"
+        in: "query"
+        description: "Exchanged currencies codes separated by commas"
+        required: true
+        type: "string"
+      - name: "date_from"
+        in: "query"
+        description: "Start date in YYYY-MM-DD format"
+        required: true
+        type: "string"
+        format: "date-time"
+      - name: "date_to"
+        in: "query"
+        description: "End date in YYYY-MM-DD format"
+        required: true
+        type: "string"
+        format: "date-time"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CurrencyExchangeRate"
+        "400":
+          description: "Invalid parameters supplied"
+  /convert/:
+    get:
+      tags:
+      - "exchange rate"
+      summary: "Convert currency amount to exchanged currency"
+      description: "Lastest exchange rate for currency pair is used"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "source_currency"
+        in: "query"
+        description: "Source currency code"
+        required: true
+        type: "string"
+      - name: "exchanged_currency"
+        in: "query"
+        description: "Exchanged currency code to convert into"
+        required: true
+        type: "string"
+      - name: "amount"
+        in: "query"
+        description: "Source currency amount to convert"
+        required: true
+        type: "number"
+        format: "float"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/CurrencyExchangeRateAmount"
+        "400":
+          description: "Invalid parameters supplied"
+        "404":
+          description: "Exchange rate for convertion not found"
+  /currencies/:
+    get:
+      tags:
+      - "currency"
+      summary: "Currencies list"
+      description: "Complete list of available currencies"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Currency"
+  /currencies/{code}/:
+    get:
+      tags:
+      - "currency"
+      summary: "Currency info"
+      description: "Currency code, symbol and name details"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "code"
+        description: "Standard ISO 4217 alphabetic three-letter currency code"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Currency"
+        "404":
+          description: "Currency not found"
+  /time-weighted/:
+    get:
+      tags:
+      - "exchange rate"
+      summary: "Time weighted rate (TWR) of return"
+      description: "Calculate TWR compound measure"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "source_currency"
+        in: "query"
+        description: "Source currency code"
+        required: true
+        type: "string"
+      - name: "exchanged_currency"
+        in: "query"
+        description: "Exchanged currency code"
+        required: true
+        type: "string"
+      - name: "date_from"
+        in: "query"
+        description: "Start date in YYYY-MM-DD format"
+        required: true
+        type: "string"
+        format: "date-time"
+      - name: "date_to"
+        in: "query"
+        description: "End date in YYYY-MM-DD format"
+        required: true
+        type: "string"
+        format: "date-time"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/TimeWeightedRate"
+        "400":
+          description: "Invalid parameters supplied"
+        "500":
+          description: "Remote server not available"
+definitions:
+  Currency:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Standard ISO 4217 alphabetic three-letter currency code"
+        example: "USD"
+      name:
+        type: "string"
+        description: "Currency name"
+        example: "United States dollar"
+      symbol:
+        type: "string"
+        description: "Currency symbol"
+        example: "$"
+  CurrencyExchangeRate:
+    type: "object"
+    properties:
+      exchanged_currency:
+        type: "string"
+        description: "Standard ISO 4217 alphabetic three-letter currency code"
+        example: "EUR"
+      valuation_date:
+        type: "string"
+        description: "Exchange rate date in YYYY-MM-DD format"
+        example: "2021-10-26"
+      rate_value:
+        type: "number"
+        description: "Exchange rate float value"
+        example: "1.243216"
+  CurrencyExchangeRateAmount:
+    type: "object"
+    properties:
+      exchanged_currency:
+        type: "string"
+        description: "Standard ISO 4217 alphabetic three-letter currency code"
+        example: "EUR"
+      exchanged_amount:
+        type: "number"
+        description: "Exchanged amount in exchanged currency units"
+        example: "23.76"
+      rate_value:
+        type: "number"
+        description: "Exchange rate value applied to the convertion"
+        example: "1.243216"
+  TimeWeightedRate:
+    type: "object"
+    properties:
+      time_weighted_rate:
+        type: "number"
+        description: "Calculated time weighted rate of return compound measure"
+        example: "1.223178"
