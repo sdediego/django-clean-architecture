@@ -16,21 +16,21 @@ from src.usecases.exchange_rate import (
 class CurrencyDatabaseRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyDatabaseRepository:
         return CurrencyDatabaseRepository()
 
 
 class CurrencyCacheRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyCacheRepository:
         return CurrencyCacheRepository()
 
 
 class CurrencyRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyRepository:
         db_repo = CurrencyDatabaseRepositoryFactory.get()
         cache_repo = CurrencyCacheRepositoryFactory.get()
         return CurrencyRepository(db_repo, cache_repo)
@@ -39,7 +39,7 @@ class CurrencyRepositoryFactory:
 class CurrencyInteractorFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyInteractor:
         currency_repo = CurrencyRepositoryFactory.get()
         return CurrencyInteractor(currency_repo)
 
@@ -47,7 +47,7 @@ class CurrencyInteractorFactory:
 class CurrencyViewSetFactory:
 
     @staticmethod
-    def create():
+    def create() -> CurrencyController:
         currency_interactor = CurrencyInteractorFactory.get()
         provider_client_interactor = ProviderClientInteractorFactory.get()
         return CurrencyController(
@@ -59,21 +59,21 @@ class CurrencyViewSetFactory:
 class CurrencyExchangeRateDatabaseRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyExchangeRateDatabaseRepository:
         return CurrencyExchangeRateDatabaseRepository()
 
 
 class CurrencyExchangeRateCacheRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyExchangeRateCacheRepository:
         return CurrencyExchangeRateCacheRepository()
 
 
 class CurrencyExchangeRateRepositoryFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyExchangeRateRepository:
         db_repo = CurrencyExchangeRateDatabaseRepositoryFactory.get()
         cache_repo = CurrencyExchangeRateCacheRepositoryFactory.get()
         return CurrencyExchangeRateRepository(db_repo, cache_repo)
@@ -82,7 +82,7 @@ class CurrencyExchangeRateRepositoryFactory:
 class CurrencyExchangeRateInteractorFactory:
 
     @staticmethod
-    def get():
+    def get() -> CurrencyExchangeRateInteractor:
         exchange_rate_repo = CurrencyExchangeRateRepositoryFactory.get()
         return CurrencyExchangeRateInteractor(exchange_rate_repo)
 
@@ -90,7 +90,7 @@ class CurrencyExchangeRateInteractorFactory:
 class CurrencyExchangeRateViewSetFactory:
 
     @staticmethod
-    def create():
+    def create() -> CurrencyExchangeRateController:
         exchange_rate_interactor = CurrencyExchangeRateInteractorFactory.get()
         provider_client_interactor = ProviderClientInteractorFactory.get()
         return CurrencyExchangeRateController(
