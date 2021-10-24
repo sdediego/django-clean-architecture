@@ -4,48 +4,50 @@ from rest_framework.routers import SimpleRouter, Route
 
 from src.infrastructure.factories.exchange_rates import (
     CurrencyViewSetFactory, CurrencyExchangeRateViewSetFactory)
+from src.interface.routes.exchange_rate import (
+   currency_router, exchange_rate_router)
 
 
 class CurrencyRouter(SimpleRouter):
     routes = [
-        Route(
-            url=r'^$',
-            mapping={'get': 'list'},
-            name='{basename}-list',
+         Route(
+            url=currency_router.get_url('currencies_list'),
+            mapping=currency_router.map('currencies_list'),
             initkwargs={'viewset_factory': CurrencyViewSetFactory},
-            detail=False
+            name='{basename}-list',
+            detail=False,
         ),
         Route(
-            url=r'^(?P<code>[a-zA-Z]+)/$',
-            mapping={'get': 'get'},
-            name='{basename}-get',
+            url=currency_router.get_url('currencies_get'),
+            mapping=currency_router.map('currencies_get'),
             initkwargs={'viewset_factory': CurrencyViewSetFactory},
-            detail=True
-        )
+            name='{basename}-get',
+            detail=False,
+        ),
     ]
 
 
 class CurrencyExchangeRateRouter(SimpleRouter):
     routes = [
         Route(
-            url=r'^$',
-            mapping={'get': 'list'},
+            url=exchange_rate_router.get_url('exchange_rate_list'),
+            mapping=exchange_rate_router.map('exchange_rate_list'),
+            initkwargs={'viewset_factory': CurrencyExchangeRateViewSetFactory},
             name='{basename}-list',
-            initkwargs={'viewset_factory': CurrencyExchangeRateViewSetFactory},
-            detail=False
+            detail=False,
         ),
         Route(
-            url=r'^convert/$',
-            mapping={'get': 'convert'},
+            url=exchange_rate_router.get_url('exchange_rate_convert'),
+            mapping=exchange_rate_router.map('exchange_rate_convert'),
+            initkwargs={'viewset_factory': CurrencyExchangeRateViewSetFactory},
             name='{basename}-convert',
-            initkwargs={'viewset_factory': CurrencyExchangeRateViewSetFactory},
-            detail=False
+            detail=False,
         ),
         Route(
-            url=r'^time-weighted/$',
-            mapping={'get': 'calculate_twr'},
-            name='{basename}-calculate-twr',
+            url=exchange_rate_router.get_url('exchange_rate_calculate_twr'),
+            mapping=exchange_rate_router.map('exchange_rate_calculate_twr'),
             initkwargs={'viewset_factory': CurrencyExchangeRateViewSetFactory},
-            detail=False
-        )
+            name='{basename}-calculate-twr',
+            detail=False,
+        ),
     ]

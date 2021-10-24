@@ -20,5 +20,5 @@ exchange_rate_router.register(
 
 urlpatterns = [
     path('', include(exchange_rate_router.urls)),
-    path('currencies/', include(currency_router.urls))
+    path('', include(currency_router.urls))
 ]
