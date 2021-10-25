@@ -6,6 +6,8 @@ import string
 
 import pytest
 
+from src.domain.core.constants import HTTP_VERBS
+from src.domain.core.routing import Route, Router
 from src.domain.exchange_rate import (
     CurrencyEntity, CurrencyExchangeRateEntity,
     CurrencyExchangeAmountEntity, TimeWeightedRateEntity)
@@ -96,3 +98,26 @@ def provider_setting(provider) -> ProviderSettingEntity:
         value=value,
         description=generate_random_string(25)
     )
+
+
+@pytest.fixture
+def route() -> Route:
+
+    class TestController:
+        def test_method(self) -> str:
+            return 'test_method'
+
+    return Route(
+        http_verb=random.choice(list(HTTP_VERBS)),
+        path='/api/path/to/fake/endpoint/',
+        controller=TestController,
+        method='test_method',
+        name='test_route',
+    )
+
+
+@pytest.fixture
+def router(route) -> Router:
+    router = Router()
+    router.register(route)
+    return router
