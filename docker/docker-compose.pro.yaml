@@ -12,6 +12,8 @@ services:
     restart: always
     environment:
       - REDIS_PORT=${REDIS_PORT}
+    volumes:
+      - redisdata_production:/var/lib/redis/data
   db:
     restart: always
     environment:
@@ -19,9 +21,24 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_PORT=${POSTGRES_PORT}
+    volumes:
+      - pgdata_production:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -q -d ${POSTGRES_DB} -U postgres
+      interval: 10s
+      timeout: 10s
+      retries: 5
   worker:
     image: worker:production
     restart: always
     command: sh scripts/start_worker.sh
     environment:
       - DJANGO_ENV=production
+
+volumes:
+  pgdata_production:
+    driver: local
+    name: pgdata_production
+  redisdata_production:
+    driver: local
+    name: redisdata_production
