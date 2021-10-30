@@ -3,6 +3,7 @@
 This repository contains the code for Forex API backend. The application aims to provide information for all currencies, latests and historical time series exchange rates for currency pairs, currency conversion and time weighted rates calculation.
 
 ## Documentation
+
 This project has been developed using [Django][django] and [Django Rest Framework][djangorestframework], with [Celery][celery] as background tasks runner, [Postgres][postgres] as relational database and [Redis][redis] as cache service.
 
 Code structure implementation follows a [Clean Architecture][cleanarchitecture] approach, emphasizing on code readability, responsibility decoupling and unit testing.
@@ -24,7 +25,8 @@ Get free API Key for the following exchange rate services:
 Later update database with each value for the corresponding provider _api_key_ setting using the backend admin panel.
 
 ## Run the API backend:
-Create docker images and execute the containers. From the project directory:
+
+Create docker images and execute the containers for development. From the project directory:
 ```
 docker-compose -f ./docker/docker-compose.yaml -f ./docker/docker-compose.dev.yaml up
 ```
@@ -35,11 +37,16 @@ docker-compose -f ./docker/docker-compose.yaml -f ./docker/docker-compose.dev.ya
 ```
 
 ## Execute tests suite
-1. Access running _forex_api_ docker container shell:
+
+1. Execute the docker containers with environment variables setup for testing:
+```
+docker-compose -f ./docker/docker-compose.yaml -f ./docker/docker-compose.test.yaml up
+```
+2. Access running api backend _forex_api_ docker container shell:
 ```
 docker exec -it forex_api bash
 ```
-2. Execute pytest command from project directory:
+3. Execute pytest command from project directory:
 ```
 pytest
 ```
