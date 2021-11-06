@@ -14,7 +14,7 @@ For API backend endpoints documentation refer to the [forex yaml][swagger] file 
 
 Download source code cloning this repository:
 ```
-git clone https://github.com/sdediego/forex-django-clean-architecture.git
+git clone https://github.com/sdediego/django-clean-architecture.git
 ```
 
 Get free API Key for the following exchange rate services:
@@ -59,4 +59,4 @@ pytest
 [postgres]: <https://www.postgresql.org>
 [redis]: <https://redis.io>
 [cleanarchitecture]: <https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html>
-[swagger]: <https://github.com/sdediego/forex-django-clean-architecture/docs/forex.yaml>
+[swagger]: <https://github.com/sdediego/django-clean-architecture/blob/main/docs/forex.yaml>
